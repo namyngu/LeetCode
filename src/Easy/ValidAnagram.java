@@ -1,14 +1,19 @@
 package Easy;
 
+import java.util.HashMap;
+import java.util.Objects;
+
 class ValidAnagram {
 
     public static void main(String[] args) {
         ValidAnagram start = new ValidAnagram();
-        start.isAnagram("anagram", "nagaram");
+        String str1 = "anagram";
+        String str2 = "nanogram";
+        System.out.println(start.isAnagram2(str1, str2));
     }
 
-
-    // strategy - sort all the letters in alphabetical order then compare them
+    // strategy 1 - sort all the letters in alphabetical order then compare them
+    // Time complexity - O(nlogn), space ~ O(n) but some interviewers think it's O(1)?
     public boolean isAnagram(String s, String t) {
         // convert strings to char arrays
         char[] sChars = s.toCharArray();
@@ -26,6 +31,56 @@ class ValidAnagram {
         else {
             return false;
         }
+    }
+
+    // Strategy 2 - count the occurrences of each character using a hashmap
+    // Time complexity - O(n), space complexity O(n)
+    public boolean isAnagram2(String s, String t) {
+
+        if (s.length() != t.length()) {
+            return false;
+        }
+
+        HashMap<Character, Integer> sMap = new HashMap<>();
+        HashMap<Character, Integer> tMap = new HashMap<>();
+
+        // count occurrences of characters and map it to the hashmap
+        for (int i = 0; i < s.length(); i++) {
+            char ch = s.charAt(i);
+
+            if (!sMap.containsKey(ch)) {
+                sMap.put(ch, 1);
+            }
+            else {
+                sMap.put(ch, sMap.get(ch) + 1);     // increment value by 1
+            }
+        }
+
+        for (int i = 0; i < t.length(); i++) {
+            char ch = t.charAt(i);
+
+            if (!tMap.containsKey(ch)) {
+                tMap.put(ch, 1);
+            }
+            else {
+                tMap.put(ch, tMap.get(ch) + 1);     // increment value by 1
+            }
+        }
+
+        // iterate through the hashmap of s and compare with t
+        for (char ch : sMap.keySet()) {
+            if (!tMap.containsKey(ch)) {
+                return false;
+            }
+
+            //Cannot use != for non-primitive Integer types!!!
+            // When comparing Number objects such as Integer, Double, etc., using the != operator, it compares their references, not their values.
+            if (!Objects.equals(tMap.get(ch), sMap.get(ch))) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public char[] mergeSort(char[] array) {
