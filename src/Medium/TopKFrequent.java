@@ -18,7 +18,7 @@ public class TopKFrequent {
 
     public static void main(String[] args) {
         TopKFrequent start = new TopKFrequent();
-        int[] solution = start.topkFrequent2(new int[]{4, 1, -1, 2, -1, 2, 3}, 2);
+        int[] solution = start.topkFrequent3(new int[]{4, 1, -1, 2, -1, 2, 3}, 2);
 
         System.out.println(start.toString(solution));
 
@@ -90,10 +90,11 @@ public class TopKFrequent {
         return solution;
     }
 
-    // Strat 2
+    // Strat 2 - HashMap + ArrayList
     //1. Loop through integer array and map integer occurrences onto a hashmap
     //2. convert hashmap to arraylist
     //3. sort arraylist in order using comparator.
+    // Time Complexity: O(nlogn)
     // RESULT: 17ms - beats 21.86% not bad
 
     public int[] topkFrequent2(int[] nums, int k) {
@@ -103,13 +104,7 @@ public class TopKFrequent {
         // Loop through array and count integer occurrences - map it to hashmap.
         for (int i = 0; i < nums.length; i++) {
             int currentNum = nums[i];
-
-            if (map.containsKey(currentNum)) {
-                map.put(currentNum, map.get(currentNum) + 1);
-
-            } else {
-                map.put(currentNum, 1);
-            }
+            map.put(currentNum, map.getOrDefault(currentNum, 0) + 1);
         }
 
         Set<Map.Entry<Integer, Integer>> entrySet = map.entrySet();
@@ -139,6 +134,41 @@ public class TopKFrequent {
         return solution;
     }
 
+    // Strat 3 - Use PriorityQueues + HashMap
+    // Time Complexity: O(nlogn)
+    // RESULT: 14ms
+    public int[] topkFrequent3(int[] nums, int k) {
+
+        // Integer, occurrences
+        HashMap<Integer, Integer> map = new HashMap<>();
+
+        // Loop through array and count integer occurrences - map it to hashmap.
+        for (int i = 0; i < nums.length; i++) {
+            int currentNum = nums[i];
+            map.put(currentNum, map.getOrDefault(currentNum, 0) + 1);
+        }
+
+        // We add all keysets (the number) to PQ
+        // We sort it by the value of the keyset using the existing hashmap.
+        PriorityQueue<Integer> pq = new PriorityQueue<Integer>(new Comparator<Integer>() {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                // if o2 > then o1 then swap, else do nothing.
+                return map.get(o2) - map.get(o1);
+            }
+        });
+
+        // add all keysets to the PQ
+        pq.addAll(map.keySet());
+
+        // grab the top k elements
+        int[] solution = new int[k];
+        for (int i = 0; i < k; i++) {
+            solution[i] = pq.poll();
+        }
+
+        return solution;
+    }
 
 
 
