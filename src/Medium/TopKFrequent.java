@@ -11,15 +11,14 @@ package Medium;
 //
 //    Follow up: Your algorithm's time complexity must be better than O(n log n), where n is the array's size
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+
+import java.util.*;
 
 public class TopKFrequent {
 
     public static void main(String[] args) {
         TopKFrequent start = new TopKFrequent();
-        int[] solution = start.topkFrequent(new int[]{4, 1, -1, 2, -1, 2, 3}, 2);
+        int[] solution = start.topkFrequent2(new int[]{4, 1, -1, 2, -1, 2, 3}, 2);
 
         System.out.println(start.toString(solution));
 
@@ -27,6 +26,7 @@ public class TopKFrequent {
 
     //Strat 1 - loop thru array and count integer occurrences - map it to a hashmap.
     // Keep track of the top k (e.g. top 5) occurrences.
+    // Result: SUPER SLOW 330+ ms runtime
     public int[] topkFrequent(int[] nums, int k) {
 
         // Integer, occurrences
@@ -68,7 +68,7 @@ public class TopKFrequent {
                 while (iterator.hasNext()) {
                     Map.Entry<Integer, Integer> entry = iterator.next();
                     if (frequency > entry.getValue()) {
-
+                        isFrequent = true;
                         iterator.remove();
                         break;
                     }
@@ -89,6 +89,58 @@ public class TopKFrequent {
         }
         return solution;
     }
+
+    // Strat 2
+    //1. Loop through integer array and map integer occurrences onto a hashmap
+    //2. convert hashmap to arraylist
+    //3. sort arraylist in order using comparator.
+    // RESULT: 17ms - beats 21.86% not bad
+
+    public int[] topkFrequent2(int[] nums, int k) {
+        // Integer, occurrences
+        HashMap<Integer, Integer> map = new HashMap<>();
+
+        // Loop through array and count integer occurrences - map it to hashmap.
+        for (int i = 0; i < nums.length; i++) {
+            int currentNum = nums[i];
+
+            if (map.containsKey(currentNum)) {
+                map.put(currentNum, map.get(currentNum) + 1);
+
+            } else {
+                map.put(currentNum, 1);
+            }
+        }
+
+        Set<Map.Entry<Integer, Integer>> entrySet = map.entrySet();
+        ArrayList<Map.Entry<Integer, Integer>> listOfNums = new ArrayList<>(entrySet);
+        Comparator<Map.Entry<Integer, Integer>> comparator = new Comparator<>() {
+            // the Comparator will swap if compare() returns > 1, else it won't swap.
+            @Override
+            public int compare(Map.Entry<Integer, Integer> o1, Map.Entry<Integer, Integer> o2) {
+                if (o1.getValue() < o2.getValue()) {
+                    return 1;
+                }
+                else if (o1.getValue().equals(o2.getValue())) {
+                    return 0;
+                }
+                else {
+                    return -1;
+                }
+            }
+        };
+        Collections.sort(listOfNums, comparator);
+
+        int[] solution = new int[k];
+        for (int i = 0; i < k; i++) {
+            solution[i] = listOfNums.get(i).getKey();
+        }
+
+        return solution;
+    }
+
+
+
 
     public String toString(int[] array) {
         StringBuilder sb = new StringBuilder();
