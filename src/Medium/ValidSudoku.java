@@ -6,10 +6,23 @@ public class ValidSudoku {
 
     public static void main(String[] args) {
         ValidSudoku start = new ValidSudoku();
+        char[][] input = {
+                {'.','.','4','.','.','.','6','3','.'},
+                {'.','.','.','.','.','.','.','.','.'},
+                {'5','.','.','.','.','.','.','9','.'},
+                {'.','.','.','5','6','.','.','.','.'},
+                {'4','.','3','.','.','.','.','.','1'},
+                {'.','.','.','7','.','.','.','.','.'},
+                {'.','.','.','5','.','.','.','.','.'},
+                {'.','.','.','.','.','.','.','.','.'},
+                {'.','.','.','.','.','.','.','.','.'}
+        };
+
+        System.out.println(start.isValidSudoku(input));
     }
 
     // Strat 1 - take each number entry as a String of rowx,coly,numz
-    //
+    // RESULT: 23ms kinda slow but remove the Math.floor and its 13ms which is acceptable.
     public boolean isValidSudoku(char[][] board) {
 
         HashSet<String> rowMap = new HashSet<>();       // row5,num2
@@ -20,14 +33,14 @@ public class ValidSudoku {
             for (int j = 0; j < 9; j++) {
                 // rows
                 if (board[i][j] == '.') {
-                    break;
+                    continue;
                 }
 
                 char num = board[i][j];
                 String row = "row" + i + "," + "num" + num;
                 String col = "col" + j + "," + "num" + num;
                 // you could check which box the number belongs in by doing lots of if-else statements but that looks ugly
-                String box = "box" + Math.floor(i/3) + "-" + Math.floor(j/3) + "," + "num" + num;
+                String box = "box" + Math.floor(i/3.0) + "-" + Math.floor(j/3.0) + "," + "num" + num;       // technically reads box0.0-0.0,numz but doesn't matter
 
                 // if number already exists in any row col or box then return false
                 if (!rowMap.add(row) || !colMap.add(col) || !boxMap.add(box)) {
