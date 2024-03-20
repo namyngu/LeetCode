@@ -3,6 +3,9 @@ package Medium;
 import java.util.*;
 
 // Strat 2 is the answer!!!!
+//Given an array of strings strs, group the anagrams together. You can return the answer in any order.
+//
+//        An Anagram is a word or phrase formed by rearranging the letters of a different word or phrase, typically using all the original letters exactly once.
 public class GroupAnagrams {
 
     //Strategy 1 - Count the number of occurrences of each character in a string, do this for all strings in array.
@@ -47,9 +50,7 @@ public class GroupAnagrams {
 
 
     // Strategy 2 - We can group the anagrams by using the sorted string (signature) as a key in a hashmap
-    // loop through the strs array and assign a string to a variable "word"
-    // We sort the string
-    //
+    //RESULT: 6ms very fast!
     public List<List<String>> groupAnagrams2(String[] strs) {
 
         HashMap<String, List<String>> map = new HashMap<>();
