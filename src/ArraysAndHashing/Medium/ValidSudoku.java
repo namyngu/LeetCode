@@ -23,6 +23,7 @@ public class ValidSudoku {
 
     // Strat 1 - take each number entry as a String of rowx,coly,numz
     // RESULT: 23ms kinda slow but remove the Math.floor and its 13ms which is acceptable.
+    // Time Complexity: O(1) because the board is always 9x9
     public boolean isValidSudoku(char[][] board) {
 
         HashSet<String> rowMap = new HashSet<>();       // row5,num2

@@ -1,4 +1,4 @@
-package TwoPointers;
+package TwoPointers.Easy;
 
 //A phrase is a palindrome if, after converting all uppercase letters into lowercase letters and removing all non-alphanumeric characters, it reads the same forward and backward. Alphanumeric characters include letters and numbers.
 //
@@ -35,6 +35,13 @@ import java.util.Deque;
 // Time Complexity: O(n)
 // RESULT: 4ms
 public class ValidPalindrome {
+
+    public static void main(String[] args) {
+        ValidPalindrome start = new ValidPalindrome();
+        String input = "A man, a plan, a canal: Panama";
+        start.isPalindrome(input);
+    }
+
     public boolean isPalindrome(String s) {
         Deque<Character> deque = new ArrayDeque<>();
 
