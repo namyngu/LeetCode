@@ -42,6 +42,13 @@ import java.util.*;
 // Doesn't work with duplicates
 public class ThreeSum {
 
+    public static void main(String[] args) {
+        ThreeSum start = new ThreeSum();
+        int[] input = new int[] {-1,0,1,2,-1,-4,-2,-3,3,0,4};
+
+        start.threeSum2(input);
+    }
+
     public List<List<Integer>> threeSum(int[] nums) {
 
         HashMap<Integer, Integer> map = new HashMap<>();
@@ -56,7 +63,7 @@ public class ThreeSum {
 
         while (leftPointer < rightPointer) {
 
-            int num3 = 0 - nums[leftPointer] - nums[rightPointer];
+            int num3 = -nums[leftPointer] - nums[rightPointer];
 
 
             if (map.containsKey(num3) && map.get(num3) > leftPointer && map.get(num3) < rightPointer) {
@@ -78,24 +85,28 @@ public class ThreeSum {
 
     // Strat 2
     // Fix one of the numbers then it becomes a two sum problem
+    // Time Complexity: O(n^2)
+    // Space Complexity: O(n)
+    // RESULT: SLOW 509ms
     public List<List<Integer>> threeSum2(int[] nums) {
-
+        int target = 0;
         //Used hashset here to avoid duplicates
         HashSet<List<Integer>> solution = new HashSet<>();
 
         Arrays.sort(nums);
-        int leftPointer = 0;
-        int rightPointer = nums.length - 1;
 
         // i is your third pointer
         for (int i = 0; i < nums.length - 2; i++) {
-            int target = 0 - nums[i];
 
-            leftPointer = i + 1;
+
+            int leftPointer = i + 1;
+            int rightPointer = nums.length - 1;
 
             while (leftPointer < rightPointer) {
 
-                if (nums[leftPointer] + nums[rightPointer] == target) {
+                int sum = nums[i] + nums[leftPointer] + nums[rightPointer];
+
+                if (sum == target) {
                     List<Integer> triplet = new ArrayList<>();
                     triplet.add(nums[i]);
                     triplet.add(nums[leftPointer]);
@@ -103,8 +114,9 @@ public class ThreeSum {
                     solution.add(triplet);
 
                     leftPointer++;
+                    rightPointer--;
                 }
-                else if (nums[leftPointer] + nums[rightPointer] < target) {
+                else if (sum < target) {
                     leftPointer++;
                 }
                 else {
@@ -113,6 +125,10 @@ public class ThreeSum {
             }
         }
 
-        return solution.stream().toList();
+        return new ArrayList<>(solution);
     }
+
+    // Strat 3
+    // Fix one of the numbers then it becomes a two sum problem
+    // Use hashmap to make search faster
 }
