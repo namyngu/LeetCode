@@ -160,6 +160,7 @@ public class TrappingRainWater {
 
     //Strat 3
     // LOGIC: calculate amount of water possible to be trapped at each height[i]
+    // Do this by looking at the max elevation on the left and right side - then take its minimum value.
     // Using formula min(L,R) - h[i] - watch neetcode vid for explanation
     // Time Complexity: O(n)
     // Space Complexity: O(1) (when optimised - by using 2 ptr)
