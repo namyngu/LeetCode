@@ -128,7 +128,50 @@ public class ThreeSum {
         return new ArrayList<>(solution);
     }
 
+    // Same as Strat 2 - more optimised code
+    // Time Complexity: O(n^2)
+    // Space Complexity: O(n)
+    // RESULT: 301ms
+    public List<List<Integer>> threeSum3(int[] nums) {
+        int target = 0;
+        //Used hashset here to avoid duplicates
+        HashSet<List<Integer>> solution = new HashSet<>();
+
+        Arrays.sort(nums);
+
+        // i is your third pointer
+        for (int i = 0; i < nums.length - 2; i++) {
+
+
+            int leftPointer = i + 1;
+            int rightPointer = nums.length - 1;
+
+            while (leftPointer < rightPointer) {
+
+                int sum = nums[i] + nums[leftPointer] + nums[rightPointer];
+
+                if (sum == target) {
+                    List<Integer> triplet = new ArrayList<>();
+                    triplet.add(nums[i]);
+                    triplet.add(nums[leftPointer]);
+                    triplet.add(nums[rightPointer]);
+                    solution.add(triplet);
+
+                    leftPointer++;
+                    rightPointer--;
+                }
+                else if (sum < target) {
+                    leftPointer++;
+                }
+                else {
+                    rightPointer--;
+                }
+            }
+        }
+        return new ArrayList<>(solution);
+    }
+}
+
     // Strat 3
     // Fix one of the numbers then it becomes a two sum problem
     // Use hashmap to make search faster
-}
