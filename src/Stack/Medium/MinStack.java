@@ -58,4 +58,6 @@ public class MinStack {
     public int getMin() {
         return minStack.peek();
     }
+
+    // TODO: Implement the stack without using the built-in stack function (use linkedlist or arraylist)
 }
