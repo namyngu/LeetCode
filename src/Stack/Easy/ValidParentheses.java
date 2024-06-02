@@ -38,7 +38,7 @@ import java.util.*;
 public class ValidParentheses {
 
     // Strat 1
-    // Use the stack data type to store open parenthesis and poll them when a closing parenthesis is detected
+    // Use the stack data type to store open parenthesis and pop them when a closing parenthesis is detected
     // Last in first out - LIFO
     public boolean isValid(String s) {
         Stack<Character> stack = new Stack<>();
