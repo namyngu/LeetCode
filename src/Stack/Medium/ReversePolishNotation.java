@@ -34,6 +34,8 @@ public class ReversePolishNotation {
         System.out.println(rpn.evalRPN(input));
     }
 
+
+    //NOTE: In java all integer operations automatically rounds to 0 - exception is python
     public int evalRPN(String[] tokens) {
         Stack<String> stack = new Stack<>();
         Set<String> operations = new HashSet<>();
