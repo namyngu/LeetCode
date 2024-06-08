@@ -85,7 +85,7 @@ public class GenerateParenthesis {
         }
 
         // If you can add only open parenthesis
-        else if ((openParenthCount < n) && (closeParenthCount >= openParenthCount)) {
+        else if (openParenthCount < n) {
             stack.push("(");
 
             // Go to next move - recursive function
@@ -93,7 +93,7 @@ public class GenerateParenthesis {
         }
 
         // Can only add close parenthesis
-        else if ((openParenthCount >= n) && (closeParenthCount < openParenthCount)) {
+        else {
             stack.push(")");
 
             // Go to next move - recursive function
