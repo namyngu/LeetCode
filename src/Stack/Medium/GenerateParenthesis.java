@@ -37,7 +37,7 @@ public class GenerateParenthesis {
 
     }
 
-    // Strat: Think about the condition for possible moves:
+    // Strat: Think about the condition for possible moves - FYI DON'T HAVE TO USE STACK FOR THIS PROBLEM!!!
     // Two conditions:
     // 1. next move can be open parenthesis if openParenthesis < n
     // 2. next move can be close parenthesis if closeParenthesis < openParenthesis
