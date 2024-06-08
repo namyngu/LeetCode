@@ -16,7 +16,7 @@ import java.util.Stack;
 /* Strat 1:
     1. The hardest part is to implement getMin(), especially after the pop() method since that could remove the minimum element.
     2. The strategy is to create a second stack that keeps track of the minimum value
-    3. Another key is to use this second track to keep track of the minimum value at EACH position of the original stack.
+    3. Another key is to use this second stack to keep track of the minimum value at EACH position of the original stack.
  */
 public class MinStack {
     private int min;
