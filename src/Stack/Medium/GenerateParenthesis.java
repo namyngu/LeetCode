@@ -26,7 +26,10 @@ public class GenerateParenthesis {
 
     public static void main(String[] args) {
         GenerateParenthesis gp = new GenerateParenthesis();
-        List<String> ans = gp.generateParenthesis(3);
+        List<String> ans = gp.generateParenthesis(10);
+        for (String parenthesis : ans) {
+            System.out.println(parenthesis);
+        }
     }
 
     public GenerateParenthesis() {
