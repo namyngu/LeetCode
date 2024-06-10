@@ -18,6 +18,7 @@ import java.util.Stack;
     2. The strategy is to create a second stack that keeps track of the minimum value
     3. Another key is to use this second stack to keep track of the minimum value at EACH position of the original stack.
  */
+// RESULT: 4ms runtime - beats 95.15% of users
 public class MinStack {
     private int min;
     private Stack<Integer> stack;
