@@ -98,7 +98,7 @@ public class DailyTemperatures {
         }
 
         // Any temps remaining in the stack means there's no warmer days - set all values to zero
-        // DONT NEED TO DO THIS - DEFAULT VALUE IS ALREADY 0
+        // DON'T NEED TO DO THIS - DEFAULT VALUE IS ALREADY 0
 //        while (!temp.isEmpty()) {
 //            solution[index.peek()] = 0;
 //            index.pop();
