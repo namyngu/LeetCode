@@ -36,6 +36,7 @@ public class ReversePolishNotation {
 
 
     //NOTE: In java all integer operations automatically rounds to 0 - exception is python
+    // Result: 7ms - beats 29.27% of users
     public int evalRPN(String[] tokens) {
         Stack<String> stack = new Stack<>();
         Set<String> operations = new HashSet<>();

@@ -46,6 +46,8 @@ public class GenerateParenthesis {
     // 1. If openParenthesis < n - add open parenthesis to stack and go to next move
     // 2. If closeParenthesis < add close parenthesis to stack and go to next move
     // 3. If condition 1 or 2 is not met end move and add stack to String list.
+
+    //RESULT: 3ms runtime - beats 16.65% of users
     public List<String> generateParenthesis(int n) {
         Stack<String> stack = new Stack<>();
         int openParenthCount = 0;
