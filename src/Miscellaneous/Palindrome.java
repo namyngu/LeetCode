@@ -13,12 +13,7 @@ public class Palindrome
         deque = new ArrayDeque<Character>();
     }
 
-    /**
-     *Method to check if a string is palindrome
-     *@param string      A string to check if it's a palindrome.
-     *@param n           The size of the string.
-     *@return            Returns true if string is a palindrome, otherwise returns false.
-     */
+     //Method to check if a string is palindrome
     public boolean checkPal(String string)
     {
         int n = string.length();
