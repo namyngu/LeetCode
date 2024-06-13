@@ -95,7 +95,7 @@ public class CarFleet {
         Arrays.sort(cars, new Comparator<Car>() {
             @Override
             public int compare(Car o1, Car o2) {
-                return o2.position - o1.position;           // sorts the array from largest position to smallest -
+                return o2.position - o1.position;           // sorts the array from largest position to smallest - reverse order
                                                             // the Comparator will swap if compare() returns > 1, else it won't swap.
             }
         });
