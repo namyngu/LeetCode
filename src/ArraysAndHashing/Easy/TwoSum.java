@@ -33,7 +33,7 @@ class TwoSum {
 
     public int[] twoSum2(int[] nums, int target) {
 
-        HashMap<Integer, Integer> valueIndex = new HashMap<>();
+        HashMap<Integer, Integer> valueIndex = new HashMap<>(); // num, index
         for (int i = 0; i < nums.length; i++) {
             int difference = target - nums[i];
             if (valueIndex.containsKey(difference)) {

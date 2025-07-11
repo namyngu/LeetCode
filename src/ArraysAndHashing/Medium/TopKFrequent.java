@@ -153,7 +153,7 @@ public class TopKFrequent {
         PriorityQueue<Integer> pq = new PriorityQueue<Integer>(new Comparator<Integer>() {
             @Override
             public int compare(Integer o1, Integer o2) {
-                // if o2 > then o1 then swap, else do nothing.
+                // if o2 > then o1 then swap, else do nothing. (descending order)
                 return map.get(o2) - map.get(o1);
             }
         });
@@ -170,6 +170,57 @@ public class TopKFrequent {
         return solution;
     }
 
+    // Strat 4 - Use Bucket Sort (most OP)
+    // Time Complexity - O(n)
+    // RESULT: 12ms
+    public int[] topkFrequent4(int[] nums, int k) {
+
+        // Count all number occurrences in a hashmap
+        HashMap<Integer, Integer> numFreq = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            numFreq.put(nums[i], numFreq.getOrDefault(nums[i], 0) + 1);
+        }
+
+        // Using bucket sort
+        // The array index is no. of occurrences, the values are the numbers with those occurrences
+        // Using fixed arrays is difficult to java does not allow direct creation of generic arrays like new ArrayList<Integer>[size]
+        // have to loop through the array and initialize the arraylist
+        List<Integer>[] buckets = new List[nums.length + 1]; // +1 because index 0 will not be used.
+        for (int i = 0; i < buckets.length; i++) {
+            buckets[i] = new ArrayList<>();
+        }
+
+        // iterate thru hashmap and insert the numbers in its corresponding frequency index in the array
+        for (Map.Entry<Integer, Integer> entry : numFreq.entrySet()) {
+
+            int num = entry.getKey();
+            int freq = entry.getValue();
+
+            buckets[freq].add(num);
+        }
+
+        int[] solution = new int[k];
+
+        // iterate thru the buckets until you have k most frequent elements.
+        int index = buckets.length - 1;
+        while (k > 0 && index > 0) {
+
+            List<Integer> valList = buckets[index];
+
+            if (valList == null) {
+                index--;
+                continue;
+            }
+
+            Iterator<Integer> it = valList.iterator();
+            while (it.hasNext() && k > 0) {
+                solution[k - 1] = it.next();
+                k--;
+            }
+            index--;
+        }
+        return solution;
+    }
 
 
     public String toString(int[] array) {
