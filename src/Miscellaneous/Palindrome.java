@@ -1,5 +1,15 @@
 package Miscellaneous;
 import java.util.*;
+
+// You have been given a string s that contains n characters.
+//
+// You need to write an algorithm that will check if the string is a palindrome. It will return true if it is, and false otherwise.
+//
+// A palindrome is a string that is written the same forward and backward e.g. Kayak, Hannah, Anna, etc.
+//
+// Your algorithm must use a Queue or a Queue derived datatype. Select the most appropriate so that the complexity is as low as possible. Justify your choice and the associated complexity of your algorithm.
+
+
 /**
  *Class to check if a String is a palindrome.
  *@author Hoang Nguyen
