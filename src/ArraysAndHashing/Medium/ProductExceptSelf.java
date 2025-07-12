@@ -71,4 +71,35 @@ public class ProductExceptSelf {
         }
         return ans;
     }
+
+    // My Solution to space complexity of O(1) revisited
+//    Idea:
+//    We first iterate through the nums array multiplying all the values at each index and inputting the product into
+//    the ans[], such that the product is the product of all previous values EXCLUDING the value at the current index.
+//    Similarly, we then iterate through the nums array again but in reverse and multiplying the values at each index excluding the value at the current index.
+//    We then multiply that product with the current value at the ans[] array, remembering that the current value at the ans[] array is the product of all values (excluding the current one) in ascending order.
+    public int[] productExceptSelf3(int[] nums) {
+
+        int[] ans = new int[nums.length];
+
+        // space complexity O(1)
+        for (int i = 0; i < nums.length; i++) {
+            if (i == 0) {
+                ans[i] = 1;
+                continue;
+            }
+
+            ans[i] = nums[i - 1] *ans[i - 1];
+        }
+
+        int tmp = 1;
+        for (int j = nums.length - 2; j >= 0; j--) {
+
+            ans[j] = ans[j] * tmp * nums[j + 1];
+            tmp = tmp * nums[j + 1];
+        }
+
+        return ans;
+    }
 }
+
