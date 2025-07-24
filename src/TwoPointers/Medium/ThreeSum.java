@@ -46,7 +46,7 @@ public class ThreeSum {
         ThreeSum start = new ThreeSum();
         int[] input = new int[] {-1,0,1,2,-1,-4,-2,-3,3,0,4};
 
-        start.threeSum2(input);
+        start.threeSum4(input);
     }
 
     public List<List<Integer>> threeSum(int[] nums) {
@@ -170,8 +170,58 @@ public class ThreeSum {
         }
         return new ArrayList<>(solution);
     }
+
+    // Strat 4
+    // Check previous value and skip it if it's the same to avoid duplicates
+    // Watch vid for explanation: https://youtu.be/jzZsG8n2R9A?si=7cuVH8MrVeHQJdDr
+    // Time Complexity: O(nlogn) + O(n^2)
+    // Space Complexity: O(1) or O(n) depending on how the library sorts the array.
+    // RESULT: 28ms - BLAZING!!
+    public List<List<Integer>> threeSum4(int[] nums) {
+        List<List<Integer>> ans = new ArrayList<>();
+        Arrays.sort(nums);
+
+        // i is the target
+        int len = nums.length;
+        for (int i = 0; i < len - 2; i++) {
+
+            if (i > 0 && nums[i] == nums[i - 1]) {  // skip if next value is same as prev value (avoid dupes).
+                continue;
+            }
+
+            int l = i + 1;          //  left ptr
+            int r = len - 1;    //  right ptr
+            int target = -nums[i];
+
+            while (l < r) {
+                if (nums[l] + nums[r] < target) {
+                    l++;
+                    continue;
+                }
+                else if (nums[l] + nums[r] > target) {
+                    r--;
+                    continue;
+                }
+                else {
+                    List<Integer> triplet = new ArrayList<>();
+                    triplet.add(nums[i]);
+                    triplet.add(nums[l]);
+                    triplet.add(nums[r]);
+
+                    ans.add(triplet);
+
+                    // increment the pointers - but skip if nxt ptr is same as previous
+                    // works because array is sorted
+                    l++;
+                    while (l < r && nums[l] == nums[l - 1]) {
+                        l++;
+                    }
+                }
+            }
+        }
+
+        return ans;
+    }
+
 }
 
-    // Strat 3
-    // Fix one of the numbers then it becomes a two sum problem
-    // Use hashmap to make search faster

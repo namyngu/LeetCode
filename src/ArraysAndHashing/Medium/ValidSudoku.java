@@ -38,8 +38,8 @@ public class ValidSudoku {
                 }
 
                 char num = board[i][j];
-                String row = "row" + i + "," + "num" + num;
-                String col = "col" + j + "," + "num" + num;
+                String row = "row" + i + "," + "num" + num;     //  row0,num2
+                String col = "col" + j + "," + "num" + num;     //  col1,num2
                 // you could check which box the number belongs in by doing lots of if-else statements but that looks ugly
                 // E.g. reads "box0-2,num4" - box + row + col + number.
                 String box = "box" + Math.floor(i/3.0) + "-" + Math.floor(j/3.0) + "," + "num" + num;       // technically reads box0.0-0.0,numz but doesn't matter
