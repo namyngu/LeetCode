@@ -63,6 +63,7 @@ public class WaterContainer {
     //    This is how I understood it and I hope this explanation makes it easy to understand.
 
     // Strat 2 - only move the smaller height
+    // What happens when both heights equal? Doesn't matter shift either one.
     // RESULT: 5ms
     public int maxArea2(int[] height) {
         int areaMax = 0;
@@ -109,6 +110,41 @@ public class WaterContainer {
         }
 
         return areaMax;
+    }
+
+    // Same as strat 3 just revisted
+    // RESULT: 2ms
+    public int maxArea4(int[] height) {
+
+        int l = 0;
+        int r = height.length - 1;
+        int maxA = 0;
+
+        do {
+
+            int area = Integer.min(height[l], height[r]) * (r - l);
+            maxA = Integer.max(area, maxA);
+
+            // increment/decrement the lowest height
+            int minH = Integer.min(height[l], height[r]);
+
+            if (height[l] <= minH) {
+                while (height[l] <= minH && l < r) {
+                    l++;
+                }
+            }
+            else if (height[r] <= minH) {
+                while (height[r] <= minH && l < r) {
+                    r--;
+                }
+            }
+            else {
+
+            }
+        }
+        while (l < r);
+
+        return maxA;
     }
 
 
