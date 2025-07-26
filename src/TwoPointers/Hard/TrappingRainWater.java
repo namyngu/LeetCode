@@ -210,6 +210,51 @@ public class TrappingRainWater {
         return waterSum;
     }
 
+    // Strat 4 (revisisted without looking at previous solutions)
+    // Nearly same as strat 3 but
+
+    // LOGIC: Calculate amount of water trapped at each height[i]
+    // by figuring out the max height on the left and right of current index.
+    // Do this by creating two arrays of length n that tells you the max height of left and right at each point in index.
+
+    // Space Complexity: O(n) not as optimized as strat 3
+    // Time Complexity: 0(n)
+    // RESULT: 1ms
+    public int trap4(int[] height) {
+        int len = height.length;
+
+        int[] lMax = new int[len];  // array of maximum height on the left
+        int[] rMax = new int[len];  // array of max height on the right
+        int maxLHeight = 0;
+        int maxRHeight = 0;
+
+        int ans = 0;
+
+        lMax[0] = 0;
+        rMax[len - 1] = 0;
+
+        for (int i = 1, j = len - 2 ; i < len - 1; i++, j--) {
+
+            maxLHeight = Math.max(height[i - 1], maxLHeight);
+            maxRHeight = Math.max(height[j + 1], maxRHeight);
+
+            lMax[i] = maxLHeight;
+            rMax[j] = maxRHeight;
+        }
+
+        for (int i = 0; i < len; i++) {
+
+            int water = Math.max(
+                    Math.min(lMax[i], rMax[i]) - height[i], 0   // water trapped at this index (can't be less than 0)
+            );
+
+            ans += water;
+        }
+
+        return ans;
+    }
+
+
     public static void main(String[] args) {
         TrappingRainWater start = new TrappingRainWater();
         int[] input = {0,1,0,2,1,0,1,3,2,1,2,1};
