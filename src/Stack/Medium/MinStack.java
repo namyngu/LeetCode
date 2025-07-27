@@ -1,5 +1,6 @@
 package Stack.Medium;
 
+import java.util.LinkedList;
 import java.util.Stack;
 
 //Design a stack class that supports the push, pop, top, and getMin operations.
@@ -60,5 +61,46 @@ public class MinStack {
         return minStack.peek();
     }
 
-    // TODO: Implement the stack without using the built-in stack function (use linkedlist or arraylist)
+    // Implement the stack without using the built-in stack function (use linkedlist or arraylist)
+    // Using LinkedList
+    // RESULT: 4ms
+    class MinStack2 {
+        LinkedList<Integer> stack;
+        LinkedList<Integer> minStack;
+
+
+        public MinStack2() {
+            stack = new LinkedList<>();
+            minStack = new LinkedList<>();
+        }
+
+        public void push(int val) {
+            if (stack.isEmpty()) {
+                stack.push(val);
+                minStack.push(val);
+            }
+            else {
+                stack.push(val);
+                if (val < minStack.peek()) {
+                    minStack.push(val);
+                }
+                else {
+                    minStack.push(minStack.peek());
+                }
+            }
+        }
+
+        public void pop() {
+            stack.pop();
+            minStack.pop();
+        }
+
+        public int top() {
+            return stack.peek();
+        }
+
+        public int getMin() {
+            return minStack.peek();
+        }
+    }
 }
