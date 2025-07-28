@@ -91,4 +91,49 @@ public class ReversePolishNotation {
 
         return Integer.parseInt(stack.pop());
     }
+
+    // Revisited - got it first try no errors xD
+    // RESULT: 6ms
+    public int evalRPN2(String[] tokens) {
+        Stack<Integer> stack = new Stack<>();
+
+        for (int i = 0; i < tokens.length; i++) {
+            String str = tokens[i];
+
+            if (str.equals("+")) {
+                int num1 = stack.pop();
+                int num2 = stack.pop();
+
+                int tmp = num2 + num1;
+                stack.push(tmp);
+            }
+            else if (str.equals("-")) {
+                int num1 = stack.pop();
+                int num2 = stack.pop();
+
+                int tmp = num2 - num1;
+                stack.push(tmp);
+            }
+            else if (str.equals("*")) {
+                int num1 = stack.pop();
+                int num2 = stack.pop();
+
+                int tmp = num2 * num1;
+                stack.push(tmp);
+            }
+            else if (str.equals("/")) {
+                int num1 = stack.pop();
+                int num2 = stack.pop();
+
+                int tmp = num2 / num1;
+                stack.push(tmp);
+            }
+            else {
+                int num = Integer.parseInt(str);
+                stack.push(num);
+            }
+        }
+
+        return stack.pop();
+    }
 }
