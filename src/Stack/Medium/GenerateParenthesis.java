@@ -105,4 +105,9 @@ public class GenerateParenthesis {
             nextMove(stack, openParenthCount, closeParenthCount + 1, n, solution);
         }
     }
+
+    // Revised
+    public List<String> generateParenthesis2(int n) {
+
+    }
 }
