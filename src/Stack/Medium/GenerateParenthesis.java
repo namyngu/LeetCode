@@ -109,7 +109,7 @@ public class GenerateParenthesis {
     }
 
     // Strat 2 - revisited
-    // Revised
+    // RESULT: 1ms - beats 82.71%!
     public List<String> generateParenthesis2(int n) {
 
         // Pseudocode:
@@ -151,6 +151,4 @@ public class GenerateParenthesis {
             nextMove2(parentheses + ")", openBracket, closeBracket+ 1, n);
         }
     }
-
-
 }
