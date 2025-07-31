@@ -24,6 +24,8 @@ import java.util.Stack;
 
 public class GenerateParenthesis {
 
+    List<String> ans = new ArrayList<>();
+
     public static void main(String[] args) {
         GenerateParenthesis gp = new GenerateParenthesis();
         List<String> ans = gp.generateParenthesis(10);
@@ -106,8 +108,49 @@ public class GenerateParenthesis {
         }
     }
 
+    // Strat 2 - revisited
     // Revised
     public List<String> generateParenthesis2(int n) {
 
+        // Pseudocode:
+        // If open bracket < n: can add open bracket
+        // If close bracket < open bracket: can add close bracket.
+        // stop iff open == close == n
+
+        int openBracket = 0;
+        int closeBracket = 0;
+        String parentheses = "";
+        nextMove2(parentheses, openBracket, closeBracket, n);
+
+        return ans;
     }
+
+    public void nextMove2(String parentheses, int openBracket, int closeBracket, int n) {
+
+        if (openBracket == n && closeBracket == n) {
+            // no more possible moves.
+            ans.add(parentheses);
+            return;
+        }
+
+        if (openBracket == closeBracket && openBracket < n ) {
+            // next move has to be open bracket
+            parentheses = parentheses + "(";
+            openBracket++;
+            nextMove2(parentheses, openBracket, closeBracket, n);
+        }
+        else if (openBracket == n && closeBracket < openBracket) {
+            // next move has to be close bracket
+            parentheses = parentheses + ")";
+            closeBracket++;
+            nextMove2(parentheses, openBracket, closeBracket, n);
+        }
+        else if(closeBracket < openBracket && openBracket < n) {
+            // next move can be open or close bracket
+            nextMove2(parentheses + "(", openBracket + 1, closeBracket, n);
+            nextMove2(parentheses + ")", openBracket, closeBracket+ 1, n);
+        }
+    }
+
+
 }
