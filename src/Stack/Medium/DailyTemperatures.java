@@ -109,4 +109,10 @@ public class DailyTemperatures {
     }
 
     //TODO: Possible optimisations - reduce the number of stacks by getting rid of the temp stack and comparing the temp from the temperatures array (we know index)
+    public int[] dailyTemperatures2(int[] temperatures) {
+
+
+
+        return new int[]{};
+    }
 }
