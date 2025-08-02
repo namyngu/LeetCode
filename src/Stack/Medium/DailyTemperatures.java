@@ -29,8 +29,8 @@ public class DailyTemperatures {
 
     public static void main(String[] args) {
        DailyTemperatures start = new DailyTemperatures();
-       int[] input = {30,38,30,36,35,40,28};
-       int[] ans = start.dailyTemperatures(input);
+       int[] input = {30,40,50,60};
+       int[] ans = start.dailyTemperatures3(input);
 
        for (int i = 0; i < ans.length; i++) {
            System.out.print(ans[i] + ", ");
@@ -108,7 +108,6 @@ public class DailyTemperatures {
         return solution;
     }
 
-    //TODO: Possible optimisations - reduce the number of stacks by getting rid of the temp stack and comparing the temp from the temperatures array (we know index)
 
     // Brute Force
     // Time Complexity: O(n^2)
@@ -130,4 +129,40 @@ public class DailyTemperatures {
         ans[ans.length - 1] = 0;
         return ans;
     }
+
+    //Strat 3: As we iterate through we store the temps and its indices in a stack.
+    // As soon as we encounter a higher temp than the previous one, we compare if temperatures[i] > stack.peek().
+    // If it is, we pop the stack and record the differences in indices. We then keep comparing and popping the stack until it's either empty or we encounter a higher temp.
+    //
+    // Time Complexity: O(n) + O(n) = O(n)
+    // Space Complexity: O(n)
+    // RESULT: 57ms beats 84.22%!
+    public int[] dailyTemperatures3(int[] temperatures) {
+        int[] ans = new int[temperatures.length];
+        Stack<Integer[]> stack = new Stack<>();     // [temp, index]
+
+        stack.add(new Integer[]{temperatures[0], 0});
+
+        for (int i = 1; i < temperatures.length; i++) {
+
+            if (temperatures[i] > temperatures[i - 1]) {
+
+                while (!stack.isEmpty()) {
+                    if (temperatures[i] > stack.peek()[0]) {
+                        int index = stack.pop()[1];
+                        ans[index] = i - index;
+                    }
+                    else {
+                        break;      // The stack is in decreasing order so any temp before this will be even hotter.
+                    }
+                }
+            }
+
+            stack.add(new Integer[] {temperatures[i], i});
+        }
+
+        ans[ans.length - 1] = 0;
+        return ans;
+    }
+
 }
