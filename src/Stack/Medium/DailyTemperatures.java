@@ -109,10 +109,25 @@ public class DailyTemperatures {
     }
 
     //TODO: Possible optimisations - reduce the number of stacks by getting rid of the temp stack and comparing the temp from the temperatures array (we know index)
+
+    // Brute Force
+    // Time Complexity: O(n^2)
     public int[] dailyTemperatures2(int[] temperatures) {
+        int[] ans = new int[temperatures.length];
 
+        for (int i = 0; i < temperatures.length - 1; i++) {
 
+            int tempCurr = temperatures[i];
 
-        return new int[]{};
+            for (int j = i + 1; j < temperatures.length; j++) {
+                if (tempCurr < temperatures[j]) {
+                    ans[i] = j - i;
+                    break;
+                }
+            }
+        }
+
+        ans[ans.length - 1] = 0;
+        return ans;
     }
 }
