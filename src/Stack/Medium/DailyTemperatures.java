@@ -133,7 +133,7 @@ public class DailyTemperatures {
     //Strat 3: As we iterate through we store the temps and its indices in a stack.
     // As soon as we encounter a higher temp than the previous one, we compare if temperatures[i] > stack.peek().
     // If it is, we pop the stack and record the differences in indices. We then keep comparing and popping the stack until it's either empty or we encounter a higher temp.
-    //
+    // NOTICE: our stack is always in decreasing order (not strictly but that doesn't matter).
     // Time Complexity: O(n) + O(n) = O(n)
     // Space Complexity: O(n)
     // RESULT: 57ms beats 84.22%!
@@ -158,7 +158,7 @@ public class DailyTemperatures {
                 }
             }
 
-            stack.add(new Integer[] {temperatures[i], i});
+            stack.push(new Integer[] {temperatures[i], i});
         }
 
         ans[ans.length - 1] = 0;
