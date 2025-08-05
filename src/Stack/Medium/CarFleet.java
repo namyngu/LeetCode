@@ -10,7 +10,7 @@ package Stack.Medium;
 //        If a car catches up to a car fleet at the mile target, it will still be considered as part of the car fleet.
 //
 //        Return the number of car fleets that will arrive at the destination.
-
+//
 //
 //        Example 1:
 //
