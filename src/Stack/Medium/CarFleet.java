@@ -136,4 +136,51 @@ public class CarFleet {
             this.speed = speed;
         }
     }
+
+    // Conditions for joining carfleet:
+    // 1. car arrival time (assuming no obstruction) <= carfleet's arrival time.
+    // 2. car position < carfleet's position, then car will join the car fleet.
+    // NOTE: The only position that matters in a carfleet is the car with the highest initial position in that fleet.
+
+    public int carFleet2(int target, int[] position, int[] speed) {
+        int len = position.length;
+        double[] arrivalTime = new double[len];
+
+        Stack<double[]> carFleet = new Stack<>();
+
+        for (int i = 0; i < len; i++)  {
+            double[] car = {        // position, time
+                    position[i],
+                    (target - position[i]) / ((double) speed[i])
+            };
+
+            if (i == 0) {
+                carFleet.push(car);
+                continue;
+            }
+
+            double[] prevCarFleet = carFleet.peek();
+
+            if (car[0] < prevCarFleet[0] && car[1] <= prevCarFleet[1]) {
+                // both cars become same fleet and prev car's position matter.
+                continue;
+            }
+            else if (car[0] > prevCarFleet[0] && car[1] >= prevCarFleet[1]) {
+                // current car starts closer to target but arrives slower, both car still joins same fleet
+                // but position and arrival time of fleet is changed
+
+                carFleet.pop();
+                carFleet.push(car);
+            }
+            else if (car[0] < prevCarFleet[0] && car[1] > prevCarFleet[1]) {
+                // new car fleet
+                carFleet.push(car);
+            }
+
+            //TODO: Sort the position[] array in order and still retaining the respective speed array for this method to work.
+            // Probly need to create a car object and add those objects in a list and sort it in descending order.
+        }
+
+        return 0;
+    }
 }
