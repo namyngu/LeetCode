@@ -63,9 +63,9 @@ public class CarFleet {
     public static void main(String[] args) {
 
         CarFleet start = new CarFleet();
-        int[] position = {6,8};
-        int[] speed = {3,2};
-        System.out.println(start.carFleet(10, position, speed));
+        int[] position = {10,8,0,5,3};
+        int[] speed = {2,4,1,1,3};
+        System.out.println(start.carFleet2(12, position, speed));
 
     }
 
@@ -96,7 +96,7 @@ public class CarFleet {
             @Override
             public int compare(Car o1, Car o2) {
                 return o2.position - o1.position;           // sorts the array from largest position to smallest - reverse order
-                                                            // the Comparator will swap if compare() returns > 1, else it won't swap.
+                                                            // the Comparator will swap if compare() returns > 0, else it won't swap.
             }
         });
 
@@ -142,16 +142,45 @@ public class CarFleet {
     // 2. car position < carfleet's position, then car will join the car fleet.
     // NOTE: The only position that matters in a carfleet is the car with the highest initial position in that fleet.
 
+    //  Sort the position[] array in order and still retaining the respective speed array for this method to work.
+    //  Do this by creating a 2D array that combines position[] and speed[]
+
+    // Time Complexity: O(nlogn) sorting algorithm.
+    // RESULT: 84ma - beats 48.14% kinda slow.
     public int carFleet2(int target, int[] position, int[] speed) {
         int len = position.length;
         double[] arrivalTime = new double[len];
 
+        // Combine position and speed array into one, so that we can sort it!
+        // first dimension is the index of a car, second dimension is position & speed of car
+        double[][] posAndSpeed = new double[len][2];
+        for (int i = 0; i < len; i++) {
+            posAndSpeed[i][0] = position[i];
+            posAndSpeed[i][1] = speed[i];
+        }
+
+        // Now sort position of car in descending order
+        Arrays.sort(posAndSpeed, new Comparator<double[]>() {
+            @Override
+            public int compare(double[] o1, double[] o2) {
+
+                if (o2[0] - o1[0] > 0 ) {
+                    return 1;
+                }
+                else {
+                    return -1;
+                }
+            }
+        });
+
         Stack<double[]> carFleet = new Stack<>();
 
         for (int i = 0; i < len; i++)  {
+            double pos = posAndSpeed[i][0];
+
             double[] car = {        // position, time
-                    position[i],
-                    (target - position[i]) / ((double) speed[i])
+                    posAndSpeed[i][0],
+                    (target - pos) / ((double) posAndSpeed[i][1])
             };
 
             if (i == 0) {
@@ -161,26 +190,12 @@ public class CarFleet {
 
             double[] prevCarFleet = carFleet.peek();
 
-            if (car[0] < prevCarFleet[0] && car[1] <= prevCarFleet[1]) {
-                // both cars become same fleet and prev car's position matter.
-                continue;
-            }
-            else if (car[0] > prevCarFleet[0] && car[1] >= prevCarFleet[1]) {
-                // current car starts closer to target but arrives slower, both car still joins same fleet
-                // but position and arrival time of fleet is changed
-
-                carFleet.pop();
+            if (car[1] > prevCarFleet[1]) {
+                // if current car arrives slower than prev car then new carfleet other no new carfleet.
                 carFleet.push(car);
             }
-            else if (car[0] < prevCarFleet[0] && car[1] > prevCarFleet[1]) {
-                // new car fleet
-                carFleet.push(car);
-            }
-
-            //TODO: Sort the position[] array in order and still retaining the respective speed array for this method to work.
-            // Probly need to create a car object and add those objects in a list and sort it in descending order.
         }
 
-        return 0;
+        return carFleet.size();
     }
 }
