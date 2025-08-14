@@ -149,7 +149,6 @@ public class CarFleet {
     // RESULT: 84ma - beats 48.14% kinda slow.
     public int carFleet2(int target, int[] position, int[] speed) {
         int len = position.length;
-        double[] arrivalTime = new double[len];
 
         // Combine position and speed array into one, so that we can sort it!
         // first dimension is the index of a car, second dimension is position & speed of car
