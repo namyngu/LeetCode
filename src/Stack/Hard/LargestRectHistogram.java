@@ -30,10 +30,10 @@ public class LargestRectHistogram {
     public static void main(String[] args) {
         LargestRectHistogram start = new LargestRectHistogram();
         int[] input = {
-                12,11,10,9,8,7,6,5,4,3,2,1    // expected 42
+                1,0,0,1,0,1,0,0,0,1   // expected 1
         };
         System.out.println(
-            start.largestRectangleArea(input)
+            start.largestRectangleArea2(input)
         );
     }
 
@@ -104,6 +104,81 @@ public class LargestRectHistogram {
             int[] tmpHistogram = stack.pop();
             int area = tmpHistogram[0] * (len - tmpHistogram[1]) + tmpHistogram[2];
             maxArea = Integer.max(area, maxArea);
+        }
+
+        return maxArea;
+    }
+
+    // Idea 2:
+    // 1. Figure out the area of each histogram
+    // 2. Find the left and right boundary of each histogram
+
+    // Conditions for Left boundary:
+    // 1. All previous histogram height < current.
+    //  Check this by storing histogram height and index in a stack as next histogram height's increase.
+    //  When the current histogram's height is < previous (note right boundary), we pop the stack until we encounter a histogram's height that is < current.
+
+    // Conditions for right boundary:
+    // 1. When height decreases.
+
+    // Time Complexity: O(3n) => O(n)
+    // RESULTS: 70ms - beats 57.35%
+    public int largestRectangleArea2(int[] heights) {
+        int len = heights.length;
+        int[][] boundary = new int[len][2];      // left, right boundary for ith histogram.
+
+        Stack<Integer> leftBoundaries = new Stack<>();        //  index
+        boundary[0][0] = -1;                     // left boundary of first i is always 0.
+        boundary[len - 1][1] =  len;            // right boundary of last element is always len.
+        leftBoundaries.push(0);
+
+
+        for (int i = 1; i < len; i++) {
+
+            // Check for left boundary then push new left boundary.
+            if (heights[i] > heights[i - 1]) {
+                boundary[i][0] = leftBoundaries.peek();
+            }
+            else if (heights[i] < heights[i - 1]) {
+                // Check for right boundary & flush out useless left boundaries. Then push new left boundary
+                while (!leftBoundaries.isEmpty() && heights[i] <= heights[leftBoundaries.peek()]) {
+                    int tmpIndex = leftBoundaries.peek();
+
+                    if (heights[i] < heights[tmpIndex]) {
+                        boundary[tmpIndex][1] = i;      // right boundary.
+                        leftBoundaries.pop();
+                    } else if (heights[i] == heights[tmpIndex]) {
+                        boundary[tmpIndex][1] = tmpIndex + 1;      // not true but doesn't matter as it will have same area as current histogram.
+
+                        leftBoundaries.pop();
+                    }
+                }
+
+                // Set left boundary of current histogram.
+                if (leftBoundaries.isEmpty()) {
+                    boundary[i][0] = -1;
+                } else {
+                    boundary[i][0] = leftBoundaries.peek();
+                }
+
+            }
+            else {
+                boundary[i][0] = boundary[i - 1][0];
+            }
+            leftBoundaries.push(i);
+        }
+
+        // Set right boundary for remaining histograms
+        while (!leftBoundaries.isEmpty()) {
+            boundary[leftBoundaries.peek()][1] = len;
+            leftBoundaries.pop();
+        }
+
+        // Calculate area of each histogram based on left and right boundary
+        int maxArea = 0;
+        for (int i = 0; i < len; i++) {
+            int area = (boundary[i][1] - boundary[i][0] - 1) * heights[i];      // length * height
+            maxArea = Integer.max(maxArea, area);
         }
 
         return maxArea;
