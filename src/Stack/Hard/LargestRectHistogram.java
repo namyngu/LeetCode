@@ -114,7 +114,7 @@ public class LargestRectHistogram {
     // 2. Find the left and right boundary of each histogram
 
     // Conditions for Left boundary:
-    // 1. All previous histogram height < current.
+    // 1. Check the nearest left histogram whose height is < current.
     //  Check this by storing histogram height and index in a stack as next histogram height's increase.
     //  When the current histogram's height is < previous (note right boundary), we pop the stack until we encounter a histogram's height that is < current.
 
