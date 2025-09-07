@@ -45,12 +45,14 @@ public class Search2DMatrix {
 
   // Idea 2: Do binary search by rows first using top and bottom boundary.
   // When boundary reaches <= 1, do Binary search by columns!
+  // Result: 0ms
   public boolean searchMatrix(int[][] matrix, int target) {
     // Edge case only 1 row
     if (matrix.length == 1) {
       return binarySearch(matrix[0], target);
     }
 
+    int rowLen = matrix[0].length;
     int top = 0; // top boundary
     int bottom = matrix.length - 1; // bottom boundary
     int middle = 0;
@@ -58,32 +60,16 @@ public class Search2DMatrix {
     while (bottom >= top) {
       middle = (int) Math.floor((bottom - top) / 2.0) + top;
 
-      if (target > matrix[middle][0]) {
+      if (target > matrix[middle][rowLen - 1]) {
         top = middle + 1;
       } else if (target < matrix[middle][0]) {
         bottom = middle - 1;
       } else {
-        return true;
+        // target is in this row.
+        return binarySearch(matrix[middle], target);
       }
     }
-
-    // check columns now.
-    int row = middle;
-    if (bottom < row) {
-      // check columns in previous row
-      row = row - 1;
-
-      // Edge Cases
-      if (row < 0) {
-        return false;
-      }
-
-      return binarySearch(matrix[row], target);
-
-    } else {
-      // check columns in current row
-      return binarySearch(matrix[row], target);
-    }
+    return false;
   }
 
   boolean binarySearch(int[] nums, int target) {
