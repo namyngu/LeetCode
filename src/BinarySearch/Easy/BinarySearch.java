@@ -42,45 +42,21 @@ public class BinarySearch {
     }
 
     public int search(int[] nums, int target) {
-        int len = nums.length;
+        int left = 0;
+        int right = nums.length - 1;
 
-        // Edge cases
-        if (len == 0) {
-            return -1;
-        }
-        else if(len == 1) {
-            if (nums[0] == target) {
-                return 0;
+        while (left <= right) {
+            int middle = (int) Math.floor((right - left) / 2.0) + left;
+
+            if (nums[middle] < target) {
+                left = middle + 1;
+            }
+            else if (nums[middle] > target) {
+                right = middle - 1;
             }
             else {
-                return -1;
-            }
-        }
-
-        int left = 0;
-        int right = len - 1;
-        int middle = (int) Math.floor((right - left) / 2.0);
-
-        while (right - left > 1) {
-
-            if (nums[middle] == target) {
                 return middle;
             }
-            else if (nums[middle] < target) {
-                left = middle;
-                middle = (int) Math.floor((right - left) / 2.0) + left;
-            }
-            else {
-                right = middle;
-                middle = (int) Math.floor((right - left) / 2.0);
-            }
-        }
-
-        if (nums[left] == target) {
-            return left;
-        }
-        else if( nums[right] == target) {
-            return right;
         }
 
         return -1;
