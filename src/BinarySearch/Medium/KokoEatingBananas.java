@@ -34,6 +34,14 @@ import java.util.Arrays;
 
 public class KokoEatingBananas {
 
+	public static void main(String[] args){
+		KokoEatingBananas start = new KokoEatingBananas();
+		int[] piles = {30,11,23,4,20};
+		int h = 6;
+
+		System.out.println(start.minEatingSpeed2(piles, h));
+	}
+
 
 	// Idea 1:
 	// 1. Sort the piles array
@@ -76,17 +84,64 @@ public class KokoEatingBananas {
 		return 0;
 	}
 
-	// Idea 2:
-	// 1. Sort the piles array
-	// 2. start at the last index and let k = piles[piles.length - 1]
-	// 3. Check if eatTime < h, if not keep incrementing the piles[] and check if eatTime == h.
-	// 4. If eatTime < h, then take the values between piles[i] and piles[i+1] and let k equal those values.
-	// 5. Stop when eatTime > h.
+	// Idea 2: If we have the upper bound for k which is the largest pile
+	// And lower bound is 1 (could be possible to optimize this)
+	// Then use binary search to find k.
+	//RESULT: 25ms
+	// Time complexity O(nlogn + n + nlogn) = O(nlogn)
 	public int minEatingSpeed2(int[] piles, int h) {
-		Arrays.sort(piles);
+		int len = piles.length;
+
+		// upper bound for k is the largest pile
+		// lower bound for k is (IGNORE THIS):
+		// ceil(smallest pile / k) <= ceil(h/n)
+		// k <= ((smallest pile) * n) / h. Doesn't quite work since ceil    isn't taking into account
+		int upperBound = 0;
+
+		for (int i = 0; i < len; i++) {
+			upperBound = Math.max(upperBound, piles[i]);
+		}
 
 
-		return 0;
+		int lowerBound = 1;
+
+		return binarySearch(piles, lowerBound, upperBound, h);
+
+	}
+
+	// search for k. Middle is potentially k
+	public int binarySearch(int[] piles, int left, int right, int h) {
+		int k = 0;
+
+
+		while (left <= right) {
+			int middle = (int) Math.floor((right - left) / 2.0) + left;
+
+			if (computeEatTime(piles, middle) < h) {
+				k = middle;
+				right = middle - 1;
+			}
+			else if (computeEatTime(piles, middle) > h) {
+				left = middle + 1;
+			}
+			else {
+				k = middle;
+				right = middle - 1;
+			}
+		}
+
+		return k;
+	}
+
+	// compute eat time.
+	public long computeEatTime(int[] piles, int k) {
+		long t = 0;
+
+		for (int i = 0; i < piles.length; i++) {
+			t += (long) Math.ceil(piles[i] / ((double) k));
+		}
+
+		return t;
 	}
 
 
