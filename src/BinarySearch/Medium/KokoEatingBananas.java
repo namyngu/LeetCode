@@ -65,7 +65,7 @@ public class KokoEatingBananas {
 			eatTime = middle + 1;		// all piles on left of middle (including middle) takes 1hr to eat.
 
 			for (int i = middle + 1; i < piles.length; i++) {
-				eatTime += (int) Math.ceil(piles[i] / k);
+				eatTime += (int) Math.ceil(piles[i] / (double) k);
 			}
 
 			if (eatTime < h) {
