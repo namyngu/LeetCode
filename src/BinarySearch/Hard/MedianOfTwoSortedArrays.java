@@ -32,17 +32,43 @@
 
 package BinarySearch.Hard;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MedianOfTwoSortedArrays {
 
     public static void main(String[] args) {
         MedianOfTwoSortedArrays start = new MedianOfTwoSortedArrays();
 
-        int[] nums1 = {1,3};
-        int[] nums2 = {2};
+        int[] nums1 = {0,0};
+        int[] nums2 = {0,0};
 
         double ans = start.findMedianSortedArrays(nums1, nums2);
         System.out.println("The answer is " + ans);
     }
+
+    public double findMedianSortedArrays2(int[] nums1, int[] nums2) {
+        int lenTotal = nums1.length + nums2.length;
+
+        List<Integer> mergedArray = new ArrayList<>();
+
+        // if the merged array is odd
+        if (lenTotal % 2 != 0) {
+
+            int medianIndex = (int) Math.floor(lenTotal / 2.0);
+
+            // Pick a number from array1 using binary search
+            int left = 0;
+            int right = nums1.length - 1;
+
+            while (left <= right) {
+                int middle = (int) Math.floor((right - left) / 2.0) + left;
+
+
+            }
+        }
+    }
+
 
     // Strategy: Pick the middle number in the smaller sized array.
     // Check the index it will be located in the larger array using binary search.
@@ -64,7 +90,7 @@ public class MedianOfTwoSortedArrays {
 
             // binary search array 1 for a number
             while (left <= right) {
-                int middle = (int) Math.floor((right - left) / 2.0);
+                int middle = (int) Math.floor((right - left) / 2.0) + left;
 
                 // binary search second array for index of chosen number.
                 int foundIndex = findIndex(nums2, nums1[middle], middle);
@@ -86,7 +112,7 @@ public class MedianOfTwoSortedArrays {
 
             // binary search smaller array for a number
             while (left <= right) {
-                int middle = (int) Math.floor((right - left) / 2.0);
+                int middle = (int) Math.floor((right - left) / 2.0) + left;
 
                 // binary search second array for index of chosen number.
                 int foundIndex = findIndex(nums1, nums2[middle], middle);
@@ -149,7 +175,7 @@ public class MedianOfTwoSortedArrays {
 
             // binary search second array for a number
             while (left <= right) {
-                int middle = (int) Math.floor((right - left) / 2.0);
+                int middle = (int) Math.floor((right - left) / 2.0) + left;
 
                 // binary search second array for index of chosen number.
                 int foundIndex = findIndex(nums1, nums2[middle], middle);
