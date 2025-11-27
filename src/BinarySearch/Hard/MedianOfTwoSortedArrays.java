@@ -96,7 +96,7 @@ public class MedianOfTwoSortedArrays {
             int right2 = nums2.length - 1;
 
             while (left2 <= right2) {
-                int middle = (int) Math.floor()
+                int middle = (int) Math.floor((right - left) / 2.0);
             }
 
         }
