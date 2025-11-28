@@ -40,10 +40,10 @@ public class MedianOfTwoSortedArrays {
     public static void main(String[] args) {
         MedianOfTwoSortedArrays start = new MedianOfTwoSortedArrays();
 
-        int[] nums1 = {0,0};
-        int[] nums2 = {0,0};
+        int[] nums1 = {1,2};
+        int[] nums2 = {3,4};
 
-        double ans = start.findMedianSortedArrays(nums1, nums2);
+        double ans = start.findMedianSortedArrays2(nums1, nums2);
         System.out.println("The answer is " + ans);
     }
 
@@ -57,48 +57,155 @@ public class MedianOfTwoSortedArrays {
 
             int medianIndex = (int) Math.floor(lenTotal / 2.0);
 
-            // Pick a number from array1 using binary search
-            int left = 0;
-            int right = nums1.length - 1;
-
-            while (left <= right) {
-                int middle = (int) Math.floor((right - left) / 2.0) + left;
-
-                // Checks if there are duplicates of this number.
-                int[] indexAndFreq1 = checkDuplicates(middle, nums1);       // Array of size 2: [starting index, no. of duplicates].
-
-                // Find where the index of the chosen number in the merge array
-                int[] indexAndFreq2 = binarySearchArray(nums2, nums1[middle]);
-
-                // Compute the starting index of merge array and total no. of duplicates
-                int[] mergeIndexAndFreq = {indexAndFreq1[0] + indexAndFreq2[0], indexAndFreq1[1], indexAndFreq2[1]};
-
-                // E.g. if merge array is like [2,3,4,8,8,8,10,12,13]
-                if (medianIndex >= mergeIndexAndFreq[0] && medianIndex <= (mergeIndexAndFreq[0] + mergeIndexAndFreq[1])) {
-                    // found median
-                    return nums1[middle];
+            try {
+                return findMedian(nums1, nums2, medianIndex);
+            } catch (Exception e) {
+                try {
+                    // Median not in first array.
+                    return findMedian(nums2, nums1, medianIndex);
+                } catch (Exception f) {
+                    System.out.println("Error something went wrong!");
                 }
-                else if (mergeIndexAndFreq[0] > medianIndex) {
-                    // chosen number is too high.
-                    right = middle - 1;
+            }
+        }
+        // merge array is even
+        else {
+            int medianIndexR = lenTotal / 2;
+            int medianIndexL = medianIndexR - 1;
 
-                }
-                else {
-                    // chosen number is too low.
-                    left = middle + 1;
+            double median1 = -0.222;
+            double median2 = -0.222;
+
+            try {
+                median1 =  findMedian(nums1, nums2, medianIndexL, medianIndexR); // could also include both medians
+            } catch (Exception e) {
+                try {
+                    // No median in first array second array must have both medians.
+                    return findMedian(nums2, nums1, medianIndexL, medianIndexR);
+                } catch (Exception f) {
+                    System.out.println("Error something went wrong!");
                 }
             }
 
-            // Median not in first array.
+            try {
+                median2 =  findMedian(nums2, nums1, medianIndexL, medianIndexR); // could also include both medians
+                if (median1 != -0.222) {
+                    return median1 + median2 / 2.0;
+                }
+            } catch (Exception e) {
+                // median not found - both medians must be in median1
+                return median1;
+            }
+        }
 
-            // Pick a number from array 2
-            int left2 = 0;
-            int right2 = nums2.length - 1;
+        // Shouldn't get here.
+        return -9999;
+    }
 
-            while (left2 <= right2) {
-                int middle = (int) Math.floor((right - left) / 2.0);
+    // Method to pick a number from the source array and compares it with the searchArray to calculate its index if the two arrays were merged.
+    // Assumes the merged array is odd.
+    // Returns the median.
+    double findMedian(int[] sourceArray, int[] searchArray, int medianIndex) {
+        // Pick a number from sourceArray using binary search
+        int left = 0;
+        int right = sourceArray.length - 1;
+
+        while (left <= right) {
+            int middle = (int) Math.floor((right - left) / 2.0) + left;
+
+            // Checks if there are duplicates of this number.
+            int[] indexAndFreq1 = checkDuplicates(middle, sourceArray);       // Array of size 2: [starting index, no. of duplicates].
+
+            // Find where the index of the chosen number in the merge array
+            int[] indexAndFreq2 = binarySearchArray(searchArray, sourceArray[middle]);
+
+            // Compute the starting index of merge array and total no. of duplicates
+            int[] mergeIndexAndFreq = {indexAndFreq1[0] + indexAndFreq2[0], indexAndFreq1[1] + indexAndFreq2[1]};
+
+            // E.g. if merge array is like [2,3,4,8,8,8,10,12,13]
+            if (medianIndex >= mergeIndexAndFreq[0] && medianIndex <= (mergeIndexAndFreq[0] + mergeIndexAndFreq[1])) {
+                // found median
+                return sourceArray[middle];
+            }
+            else if (mergeIndexAndFreq[0] > medianIndex) {
+                // chosen number is too high.
+                right = middle - 1;
+
+            }
+            else {
+                // chosen number is too low.
+                left = middle + 1;
+            }
+        }
+
+        throw new IllegalArgumentException("Median not found");
+    }
+
+    // Method to pick a number from the source array and compares it with the searchArray to calculate its index if the two arrays were merged.
+    // Assumes the merged array is even.
+    // Returns the median.
+    double findMedian(int[] sourceArray, int[] searchArray, int medianIndexL, int medianIndexR) {
+
+        int left = 0;
+        int right = sourceArray.length - 1;
+        boolean foundMedianL = false;
+        boolean foundMedianR = false;
+        int medianL = 0;
+        int medianR = 0;
+
+        // Pick a number from sourceArray using binary search
+        while (left <= right) {
+            int middle = (int) Math.floor((right - left) / 2.0) + left;
+
+            // Checks if there are duplicates of this number.
+            int[] indexAndFreq1 = checkDuplicates(middle, sourceArray);       // Array of size 2: [starting index, no. of duplicates].
+
+            // Find where the index of the chosen number in the merge array
+            int[] indexAndFreq2 = binarySearchArray(searchArray, sourceArray[middle]);
+
+            // Compute the starting index of merge array and total no. of duplicates
+            int[] mergeIndexAndFreq = {indexAndFreq1[0] + indexAndFreq2[0], indexAndFreq1[1] + indexAndFreq2[1]};
+
+            // E.g. if merge array is like [2,3,4,8,8,8,10,12,13,14]
+            if (mergeIndexAndFreq[0] < medianIndexL) {
+                // median is on the right
+                left = middle + 1;
+            }
+            else if (mergeIndexAndFreq[0] > medianIndexR) {
+                // median is on the left
+                right = middle - 1;
+            }
+            else if (medianIndexL >= mergeIndexAndFreq[0] && medianIndexL <= (mergeIndexAndFreq[0] + mergeIndexAndFreq[1]) &&
+                    medianIndexR >= mergeIndexAndFreq[0] && medianIndexR <= (mergeIndexAndFreq[0] + mergeIndexAndFreq[1])) {
+                // found both medians
+                medianL = medianR = sourceArray[middle];
+                return medianL;
             }
 
+            else if (medianIndexL >= mergeIndexAndFreq[0] && medianIndexL <= (mergeIndexAndFreq[0] + mergeIndexAndFreq[1])) {
+                // found medianL
+                medianL = sourceArray[middle];
+                foundMedianL = true;
+            }
+            else if (medianIndexR >= mergeIndexAndFreq[0] && medianIndexR <= (mergeIndexAndFreq[0] + mergeIndexAndFreq[1])) {
+                // found medianR
+                medianR = sourceArray[middle];
+                foundMedianR = true;
+            }
+
+            if ( foundMedianL && foundMedianR) {
+                return (double) medianL + medianR / 2.0;
+            }
+        }
+
+        if (foundMedianL) {
+            return medianL;
+        }
+        else if (foundMedianR) {
+            return medianR;
+        }
+        else {
+            throw new IllegalArgumentException("Median not found");
         }
     }
 
@@ -108,14 +215,14 @@ public class MedianOfTwoSortedArrays {
         int[] ans = {index,0};  // [starting index, no. of duplicates]
 
         // Increment left and check if it's a duplicate value, then update ans.
-        while (array[left] == array[index] && left >= 0) {
+        while (left >= 0 && array[left] == array[index]) {
             ans[1] = ans[1] + 1;
             ans[0] = ans[0] - 1;
             left--;
         }
 
         // Increment right and check if it's a duplicate value, then update ans.
-        while (array[right] == array[index] && right <= array.length - 1) {
+        while (right <= array.length - 1 && array[right] == array[index]) {
             ans[1] = ans[1] + 1;
             right++;
         }
@@ -146,11 +253,11 @@ public class MedianOfTwoSortedArrays {
         // left and right are equal
         if (chosenNum > searchArray[left]) {
             int index = left + 1;
-            return new int[] {index, 1};
+            return new int[] {index, 0};
         }
         else {
-            int index = left - 1;
-            return new int[] {index, 1};
+            int index = left;
+            return new int[] {index, 0};
         }
     }
 
