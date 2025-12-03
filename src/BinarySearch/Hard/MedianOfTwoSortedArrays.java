@@ -47,8 +47,12 @@ public class MedianOfTwoSortedArrays {
         System.out.println("The answer is " + ans);
     }
 
+    // Strategy 2: Similar to strategy 1, pick a number from the smaller array (and check for copies).
+    // Using this chosen number, check what index it is in the bigger array using binary search (and check for any copies here).
+    // Once we know what index that number is in both arrays and the no. of copies, we can then compute its index in the merged array
+    // Return that number if it's the median.
     // Time Complexity: O(log(n + m))
-    // RESULT: 5ms - Beats 23.71% finally a success but method is unoptimized
+    // RESULT: 5ms - Beats 23.71% finally a success but method is slightly unoptimized
     // Not bad considering it's your first solution.
     public double findMedianSortedArrays2(int[] nums1, int[] nums2) {
         // Edge cases - one of the array is empty
@@ -73,6 +77,17 @@ public class MedianOfTwoSortedArrays {
             }
         }
 
+        int[] smallArray;
+        int[] bigArray;
+        if (nums1.length <= nums2.length) {
+            smallArray = nums1;
+            bigArray = nums2;
+        }
+        else {
+            smallArray = nums2;
+            bigArray = nums1;
+        }
+
 
         int lenTotal = nums1.length + nums2.length;
 
@@ -82,11 +97,11 @@ public class MedianOfTwoSortedArrays {
             int medianIndex = (int) Math.floor(lenTotal / 2.0);
 
             try {
-                return findMedian(nums1, nums2, medianIndex);
+                return findMedian(smallArray, bigArray, medianIndex);
             } catch (Exception e) {
                 try {
                     // Median not in first array.
-                    return findMedian(nums2, nums1, medianIndex);
+                    return findMedian(bigArray, smallArray, medianIndex);
                 } catch (Exception f) {
                     System.out.println("Error something went wrong!");
                 }
@@ -102,11 +117,11 @@ public class MedianOfTwoSortedArrays {
 
             // Find medianL
             try {
-                medianL = findMedian(nums1, nums2, medianIndexL);
+                medianL = findMedian(smallArray, bigArray, medianIndexL);
             } catch (Exception e) {
                 try {
                     // Median not in first array.
-                    medianL = findMedian(nums2, nums1, medianIndexL);
+                    medianL = findMedian(bigArray, smallArray, medianIndexL);
                 } catch (Exception f) {
                     System.out.println("Error something went wrong!");
                 }
@@ -114,11 +129,11 @@ public class MedianOfTwoSortedArrays {
 
             // Find medianR
             try {
-                medianR = findMedian(nums1, nums2, medianIndexR);
+                medianR = findMedian(smallArray, bigArray, medianIndexR);
             } catch (Exception e) {
                 try {
                     // Median not in first array.
-                    medianR = findMedian(nums2, nums1, medianIndexR);
+                    medianR = findMedian(bigArray, smallArray, medianIndexR);
                 } catch (Exception f) {
                     System.out.println("Error something went wrong!");
                 }
@@ -299,174 +314,174 @@ public class MedianOfTwoSortedArrays {
 
 
 
-    // Strategy: Pick the middle number in the smaller sized array.
+    // Strategy 1: Pick the middle number in the smaller sized array.
     // Check the index it will be located in the larger array using binary search.
     // Compare this index with the index of the median if the arrays are merged.
     // If less then pick another number in the smaller sized array (middle of left side) and repeat.
 
     // DOESN'T WORK can't handle copies
-    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
-        int len1 = nums1.length;
-        int len2 = nums2.length;
-
-        int lenTotal = len1 + len2;
-
-        // if the merged array is odd
-        if (lenTotal % 2 != 0) {
-
-            int medianIndex = (int) Math.floor(lenTotal / 2.0);
-
-            int left = 0;
-            int right = len1 - 1;
-
-            // binary search array 1 for a number
-            while (left <= right) {
-                int middle = (int) Math.floor((right - left) / 2.0) + left;
-
-                // binary search second array for index of chosen number.
-                int foundIndex = findIndex(nums2, nums1[middle], middle);
-
-                if (foundIndex < medianIndex) {
-                    left = middle + 1;
-                }
-                else if (foundIndex > medianIndex) {
-                    right = middle - 1;
-                }
-                else {
-                    return nums1[middle];
-                }
-            }
-
-            // the median is in the second array
-            left = 0;
-            right = len2 - 1;
-
-            // binary search smaller array for a number
-            while (left <= right) {
-                int middle = (int) Math.floor((right - left) / 2.0) + left;
-
-                // binary search second array for index of chosen number.
-                int foundIndex = findIndex(nums1, nums2[middle], middle);
-
-                if (foundIndex < medianIndex) {
-                    left = middle + 1;
-                }
-                else if (foundIndex > medianIndex) {
-                    right = middle - 1;
-                }
-                else {
-                    return nums2[middle];
-                }
-            }
-        }
-        else {
-            // the merged array is even
-            int medianIndexR = (int) Math.floor(lenTotal / 2.0);
-            int medianIndexL = medianIndexR - 1;
-            int medianL = -9999;
-            int medianR = -9999;
-
-            int left = 0;
-            int right = len1 - 1;
-
-            // Pick a number from array 1
-            while (left <= right) {
-                int middle = (int) Math.floor((right - left) / 2.0) + left;
-
-                // binary search second array for index of chosen number.
-                int foundIndex = findIndex(nums2, nums1[middle], middle);
-
-                if (foundIndex < medianIndexL) {
-                    left = middle + 1;
-                }
-                else if (foundIndex > medianIndexR) {
-                    right = middle - 1;
-                }
-                else if (foundIndex == medianIndexL) {
-                    medianL = nums1[middle];
-                    if (medianR != -9999) {
-                        return ((double) (medianL + medianR) / 2.0);
-                    }
-
-                    left = middle + 1;
-                }
-                else {
-                    medianR = nums1[middle];
-                    if (medianL != -9999) {
-                        return ((double) (medianL + medianR) / 2.0);
-                    }
-
-                    right = middle - 1;
-                }
-            }
-
-            // check second array
-            left = 0;
-            right = len2 - 1;
-
-            // binary search second array for a number
-            while (left <= right) {
-                int middle = (int) Math.floor((right - left) / 2.0) + left;
-
-                // binary search second array for index of chosen number.
-                int foundIndex = findIndex(nums1, nums2[middle], middle);
-
-                if (foundIndex < medianIndexL) {
-                    left = middle + 1;
-                }
-                else if (foundIndex > medianIndexR) {
-                    right = middle - 1;
-                }
-                else if (foundIndex == medianIndexL) {
-                    medianL = nums2[middle];
-                    if (medianR != -9999) {
-                        return ((double) (medianL + medianR) / 2.0);
-                    }
-
-                    left = middle + 1;
-                }
-                else {
-                    medianR = nums2[middle];
-                    if (medianL != -9999) {
-                        return ((double) (medianL + medianR) / 2.0);
-                    }
-
-                    right = middle - 1;
-                }
-            }
-        }
-
-        return -9999;
-    }
-
-
-    // For a given chosen number find its index if the two arrays are merged.
-    int findIndex(int[] arr, int chosenNum, int indexOffset) {
-        int left = 0;
-        int right = arr.length - 1;
-
-        while (left < right) {
-            int middle = (int) Math.floor((right - left) / 2.0) + left;
-
-            if (arr[middle] < chosenNum) {
-                left = middle + 1;
-            }
-            else if (arr[middle] > chosenNum) {
-                right = middle - 1;
-            }
-            else {
-                return middle + indexOffset;
-            }
-        }
-
-        // left and right are equal
-        if (chosenNum > arr[left]) {
-            return left + 1 + indexOffset;
-        }
-        else {
-            return left + indexOffset;
-        }
-    }
+//    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+//        int len1 = nums1.length;
+//        int len2 = nums2.length;
+//
+//        int lenTotal = len1 + len2;
+//
+//        // if the merged array is odd
+//        if (lenTotal % 2 != 0) {
+//
+//            int medianIndex = (int) Math.floor(lenTotal / 2.0);
+//
+//            int left = 0;
+//            int right = len1 - 1;
+//
+//            // binary search array 1 for a number
+//            while (left <= right) {
+//                int middle = (int) Math.floor((right - left) / 2.0) + left;
+//
+//                // binary search second array for index of chosen number.
+//                int foundIndex = findIndex(nums2, nums1[middle], middle);
+//
+//                if (foundIndex < medianIndex) {
+//                    left = middle + 1;
+//                }
+//                else if (foundIndex > medianIndex) {
+//                    right = middle - 1;
+//                }
+//                else {
+//                    return nums1[middle];
+//                }
+//            }
+//
+//            // the median is in the second array
+//            left = 0;
+//            right = len2 - 1;
+//
+//            // binary search smaller array for a number
+//            while (left <= right) {
+//                int middle = (int) Math.floor((right - left) / 2.0) + left;
+//
+//                // binary search second array for index of chosen number.
+//                int foundIndex = findIndex(nums1, nums2[middle], middle);
+//
+//                if (foundIndex < medianIndex) {
+//                    left = middle + 1;
+//                }
+//                else if (foundIndex > medianIndex) {
+//                    right = middle - 1;
+//                }
+//                else {
+//                    return nums2[middle];
+//                }
+//            }
+//        }
+//        else {
+//            // the merged array is even
+//            int medianIndexR = (int) Math.floor(lenTotal / 2.0);
+//            int medianIndexL = medianIndexR - 1;
+//            int medianL = -9999;
+//            int medianR = -9999;
+//
+//            int left = 0;
+//            int right = len1 - 1;
+//
+//            // Pick a number from array 1
+//            while (left <= right) {
+//                int middle = (int) Math.floor((right - left) / 2.0) + left;
+//
+//                // binary search second array for index of chosen number.
+//                int foundIndex = findIndex(nums2, nums1[middle], middle);
+//
+//                if (foundIndex < medianIndexL) {
+//                    left = middle + 1;
+//                }
+//                else if (foundIndex > medianIndexR) {
+//                    right = middle - 1;
+//                }
+//                else if (foundIndex == medianIndexL) {
+//                    medianL = nums1[middle];
+//                    if (medianR != -9999) {
+//                        return ((double) (medianL + medianR) / 2.0);
+//                    }
+//
+//                    left = middle + 1;
+//                }
+//                else {
+//                    medianR = nums1[middle];
+//                    if (medianL != -9999) {
+//                        return ((double) (medianL + medianR) / 2.0);
+//                    }
+//
+//                    right = middle - 1;
+//                }
+//            }
+//
+//            // check second array
+//            left = 0;
+//            right = len2 - 1;
+//
+//            // binary search second array for a number
+//            while (left <= right) {
+//                int middle = (int) Math.floor((right - left) / 2.0) + left;
+//
+//                // binary search second array for index of chosen number.
+//                int foundIndex = findIndex(nums1, nums2[middle], middle);
+//
+//                if (foundIndex < medianIndexL) {
+//                    left = middle + 1;
+//                }
+//                else if (foundIndex > medianIndexR) {
+//                    right = middle - 1;
+//                }
+//                else if (foundIndex == medianIndexL) {
+//                    medianL = nums2[middle];
+//                    if (medianR != -9999) {
+//                        return ((double) (medianL + medianR) / 2.0);
+//                    }
+//
+//                    left = middle + 1;
+//                }
+//                else {
+//                    medianR = nums2[middle];
+//                    if (medianL != -9999) {
+//                        return ((double) (medianL + medianR) / 2.0);
+//                    }
+//
+//                    right = middle - 1;
+//                }
+//            }
+//        }
+//
+//        return -9999;
+//    }
+//
+//
+//    // For a given chosen number find its index if the two arrays are merged.
+//    int findIndex(int[] arr, int chosenNum, int indexOffset) {
+//        int left = 0;
+//        int right = arr.length - 1;
+//
+//        while (left < right) {
+//            int middle = (int) Math.floor((right - left) / 2.0) + left;
+//
+//            if (arr[middle] < chosenNum) {
+//                left = middle + 1;
+//            }
+//            else if (arr[middle] > chosenNum) {
+//                right = middle - 1;
+//            }
+//            else {
+//                return middle + indexOffset;
+//            }
+//        }
+//
+//        // left and right are equal
+//        if (chosenNum > arr[left]) {
+//            return left + 1 + indexOffset;
+//        }
+//        else {
+//            return left + indexOffset;
+//        }
+//    }
 }
 
 
