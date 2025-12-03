@@ -48,7 +48,8 @@ public class MedianOfTwoSortedArrays {
     }
 
     // Time Complexity: O(log(n + m))
-    // RESULT: 5ms - Beats 23.71% finally a success but method is unoptimized.
+    // RESULT: 5ms - Beats 23.71% finally a success but method is unoptimized
+    // Not bad considering it's your first solution.
     public double findMedianSortedArrays2(int[] nums1, int[] nums2) {
         // Edge cases - one of the array is empty
         if (nums1.length == 0) {
