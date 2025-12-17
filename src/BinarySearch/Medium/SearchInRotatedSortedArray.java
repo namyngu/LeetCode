@@ -43,10 +43,17 @@ public class SearchInRotatedSortedArray {
     public static void main(String[] args) {
         SearchInRotatedSortedArray start = new SearchInRotatedSortedArray();
         int[] input = {1,3};
-        start.search(input, 0);
+        System.out.println(start.search2(input, 1));
     }
 
     // Neetcode strategy is cleaner and less space complexity
+    // Strategy:
+    // 1. First split the array into two sorted groups, the left sorted group and right sorted group (figuratively).
+    // 2. Get the middle index and find out which group the middle index is in (left or right).
+    // 3. Based on that and the target value decide whether to search left or right of the middle index.
+    //  RESULT: 0ms - Everyone got this score
+    // Time Complexity: O(logn)
+    // Space Complexity: O(1)
     public int search2(int[] nums, int target) {
         int left = 0;
         int right = nums.length - 1;
@@ -59,25 +66,35 @@ public class SearchInRotatedSortedArray {
             }
 
             if (nums[middle] >= nums[left]) {
-                // middle is in left sorted portion
+                // middle index is in left sorted portion
 
                 if (target > nums[middle] || target < nums[left]) {
                     // search right
                     left = middle + 1;
                 }
                 else {
+                    // target < nums[middle] && target > nums[left]
                     // search left
                     right = middle - 1;
                 }
             }
             else {
-                // right sorted portion
+                // middle index is in right sorted portion
+                if (target < nums[middle] || target > nums[right]) {
+                    // search left
+                    right = middle - 1;
+                }
 
+                else {
+                    // target > nums[middle] && target < nums[right]
+                    // search right
+                    left = middle + 1;
+                }
             }
 
         }
 
-
+        return -1;
     }
 
 
