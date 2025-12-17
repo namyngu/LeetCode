@@ -29,7 +29,7 @@ public class FindMinInRotatedSortedArray {
 					min = Math.min(min, nums[middle]);
 				}
 				else {
-					// the cus it in the left side.
+					// the cut is in the left side.
 					right = middle - 1;
 					min = Math.min(min, nums[middle]);
 				}

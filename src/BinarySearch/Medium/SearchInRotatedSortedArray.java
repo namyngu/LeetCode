@@ -46,6 +46,41 @@ public class SearchInRotatedSortedArray {
         start.search(input, 0);
     }
 
+    // Neetcode strategy is cleaner and less space complexity
+    public int search2(int[] nums, int target) {
+        int left = 0;
+        int right = nums.length - 1;
+
+        while (left <= right) {
+            int middle = (int) Math.floor((right - left) / 2.0) + left;
+
+            if (nums[middle] == target) {
+                return middle;
+            }
+
+            if (nums[middle] >= nums[left]) {
+                // middle is in left sorted portion
+
+                if (target > nums[middle] || target < nums[left]) {
+                    // search right
+                    left = middle + 1;
+                }
+                else {
+                    // search left
+                    right = middle - 1;
+                }
+            }
+            else {
+                // right sorted portion
+
+            }
+
+        }
+
+
+    }
+
+
 
     // Time Complexity: O(logn) + O(logn) + O(logn) = O(logn)
     // Space Complexity: O(1)
