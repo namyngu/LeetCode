@@ -40,11 +40,99 @@ public class MedianOfTwoSortedArrays {
     public static void main(String[] args) {
         MedianOfTwoSortedArrays start = new MedianOfTwoSortedArrays();
 
-        int[] nums1 = {2,2,4,4};
-        int[] nums2 = {2,2,2,4,4};
+        int[] nums1 = {1,3};
+        int[] nums2 = {2};
 
-        double ans = start.findMedianSortedArrays2(nums1, nums2);
+        double ans = start.findMedianSortedArrays3(nums1, nums2);
         System.out.println("The answer is " + ans);
+    }
+
+    //Strategy 3: Neetcode solution
+    // 1. Find the left partition of the merged array by:
+    //  - Initially take half of the elements of the smaller array.
+    //  - Compute how many more elements we need to complete the left partition.
+    //  - Take those elements from the larger array (first half).
+    //  - validate if left partition is valid.
+    //  - if not, use binary search to take more or less elements from the smaller array then repeat.
+    // 2. Once we have the left partition compute the median.
+    //
+    // Side note: the edge cases here are very tricky due to out of bounds problem.
+    // Using
+
+    // RESULT: 2ms - beats 46.49%
+    // Time complexity O(log(min(m, n)))
+    // Space complexity: O(1)
+    public double findMedianSortedArrays3(int[] nums1, int[] nums2) {
+
+        // Edge cases
+        if (nums1.length == 0) {
+            if (nums2.length % 2 != 0) {
+                return nums2[nums2.length / 2];
+            }
+            else {
+                return ((nums2[nums2.length / 2] + nums2[(nums2.length / 2) - 1]) / 2.0);
+            }
+        }
+        else if (nums2.length == 0) {
+            if (nums1.length % 2 != 0) {
+                return nums1[nums1.length / 2];
+            }
+            else {
+                return ((nums1[nums1.length / 2] + nums1[(nums1.length / 2) - 1]) / 2.0);
+            }
+        }
+
+        int lenTotal = nums1.length + nums2.length;
+        int half = lenTotal / 2;        // integer division in java truncates towards 0 by default (equivalent to Math.floor)
+
+        // A is small array, B is large array
+        int[] A = nums1, B = nums2;
+
+        if (nums2.length < nums1.length) {
+            A = nums2;
+            B = nums1;
+        }
+
+        int left = 0;
+        int right = A.length - 1;
+
+        // since median is guaranteed
+        while (true) {
+            int i = (int) Math.floor((right - left) / 2.0) + left;   // middle index of small array
+
+            // calculate the right ptr of the large array (no middle since we are only doing binary search on the smaller array).
+            // the right ptr is the right index of the left partition in the large array.
+            int j = half - (i + 1) - 1;
+
+            // Dealing with edge cases by assigning infinities - SUPER USEFUL
+
+            // In array A, A_left is the max value of the left partition.
+            double A_left = i >= 0 ? A[i] : Double.NEGATIVE_INFINITY;
+            // In array A, A_right is the min value of the right partition.
+            double A_right = i + 1 <= A.length - 1 ? A[i + 1] : Double.POSITIVE_INFINITY;
+
+            double B_left = j >= 0 ? B[j] : Double.NEGATIVE_INFINITY;
+            double B_right = j + 1 <= B.length - 1 ? B[j + 1] : Double.POSITIVE_INFINITY;
+
+            // validate if we have the left partition of the merged array.
+            if (A_left <= B_right && B_left <= A_right) {
+                // correct partition
+                if (lenTotal % 2 != 0) {
+                    return Math.min(A_right, B_right);
+                }
+                else {
+                    return (Math.max(A_left, B_left) + Math.min(A_right, B_right)) / 2.0;
+                }
+            }
+            else if (A_left > B_right) {
+                // take less elements from A
+                right = i - 1;
+            }
+            else {
+                // take more elements from A
+                left = i + 1;
+            }
+        }
     }
 
     // Strategy 2: Similar to strategy 1, pick a number from the smaller array (and check for copies).
