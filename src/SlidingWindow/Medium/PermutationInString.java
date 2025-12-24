@@ -68,7 +68,6 @@ public class PermutationInString {
 
                 boolean skip = false;
 
-                // s2Map.put(ch, s2Map.getOrDefault(ch, 0) + 1);
                 while (right - left + 1 <= s1.length()) {
 
                     Character tmpChar = s2.charAt(right);
