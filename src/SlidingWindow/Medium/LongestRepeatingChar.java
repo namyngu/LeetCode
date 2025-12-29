@@ -38,16 +38,106 @@ public class LongestRepeatingChar {
 
     public static void main(String[] args) {
         LongestRepeatingChar start = new LongestRepeatingChar();
-        int ans = start.characterReplacement(
-                "ABAB",
-                0
+        int ans = start.characterReplacement2(
+                "AABABBA",
+                1
         );
 
         System.out.println("The answer is: " + ans);
     }
 
-    // RESULT: 80ms - beats 5.06% super slow :(
-    // Also a lot of unnecessary code - don't use this one.
+    // Strategy 2
+    // Strategy is same as strat 1 but the idea is we don't have to decrement the maxFreq when we move the left ptr.
+    // Time Complexity O(n)
+    // RESULT: 61ms beats 7.26%
+    public int characterReplacement2(String s, int k) {
+
+        // Edge case
+        if (s.length() < 2) {
+            return s.length();
+        }
+
+        int left = 0;
+        int right = 0;
+        int maxL = 0;
+
+        int maxFreq = 0;    // Tracks the count of most frequent character.
+
+        HashMap<Character, Integer> charFreq = new HashMap<>();     // Store frequency of each char between left and right ptr
+
+        while (right <= s.length() - 1) {
+
+            charFreq.put(s.charAt(right), charFreq.getOrDefault(s.charAt(right), 0) + 1);
+
+            if (charFreq.get(s.charAt(right)) > maxFreq) {
+                // new character is the most frequent char.
+                maxFreq = charFreq.getOrDefault(s.charAt(right), 0);
+                charFreq.put(s.charAt(right), maxFreq);
+
+                maxL = Math.max(maxL, right - left + 1);
+
+                right++;
+            }
+            else {
+                // new char is <= to the most frequent char.
+
+                // Check if our longest substring is still valid
+                if (right - left + 1 - maxFreq <= k) {
+                    // substring is valid
+                    maxL = Math.max(maxL, right - left + 1);
+                    right++;
+                }
+                else {
+                    // substring not valid
+                    // increment left ptr
+
+                    charFreq.put(s.charAt(left), charFreq.get(s.charAt(left)) - 1);
+
+                    if (charFreq.get(s.charAt(left)) <= 0) {
+                        charFreq.remove(s.charAt(left));
+                    }
+
+                    left++;
+
+                    while (true) {
+                        // keep incrementing left ptr until substring is valid
+
+                        // Get max freq
+                        // Time complexity for this is O(26)
+                        // TODO: Optimize this part in later strategies
+                        maxFreq = 0;
+                        Set<Character> charSet = charFreq.keySet();
+                        for (char ch : charSet) {
+                            maxFreq = Math.max(maxFreq, charFreq.get(ch));
+                        }
+
+                        if (right - left + 1 - maxFreq <= k) {
+                            // valid substring
+                            maxL = Math.max(maxL, right - left + 1);
+                            right++;
+                            break;
+                        }
+                        else {
+                            // substring not valid
+                            charFreq.put(s.charAt(left), charFreq.get(s.charAt(left)) - 1);
+
+                            if (charFreq.get(s.charAt(left)) <= 0) {
+                                charFreq.remove(s.charAt(left));
+                            }
+
+                            left++;
+                        }
+                    }
+                }
+            }
+        }
+
+        return maxL;
+    }
+
+    // Strategy 1
+    // Time Complexity: O(n) - RESULT: 80ms - beats 5.06% slow :(
+    // Works but not optimized.
     public int characterReplacement(String s, int k) {
 
         int len = s.length();
