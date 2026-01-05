@@ -57,7 +57,7 @@ public class MedianOfTwoSortedArrays {
     // 2. Once we have the left partition compute the median.
     //
     // Side note: the edge cases here are very tricky due to out of bounds problem.
-    // Using
+    // Resolved by using infinities
 
     // RESULT: 2ms - beats 46.49%
     // Time complexity O(log(min(m, n)))
