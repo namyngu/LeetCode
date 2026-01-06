@@ -62,6 +62,13 @@ public class PermutationInString {
 
     // Strategy 3
     // Neetcode optimized solution
+    // Idea:
+    // Set window size to be equal to s1.
+    // Window starts at index 0 and count the number of characters in the window and s1.
+    // If number of characters match then permutation exists.
+    // Otherwise "slide" the window to the next index and "check" the number of chars in the window and s1 again.
+    // To optimize the "check" use a counter to check the number of characters that match, instead of going thru the hashmap.
+    // if match = 26 then permutation exists.
     // Time Complexity - O(n) + O(m) + O(26)
     // RESULT: 9ms beats 45.98% - MUCH better
     // Space Complexity: O(1) - RESULT: 43.65MB beats 96.85% - very good
