@@ -37,8 +37,7 @@
 
 package SlidingWindow.Hard;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class SlidingWindowMax {
 
@@ -48,7 +47,7 @@ public class SlidingWindowMax {
         int[] nums = {1,3,-1,-3,5,3,6,7};
         int k = 3;
 
-        int[] ans = start.maxSlidingWindow(nums, k);
+        int[] ans = start.maxSlidingWindow3(nums, k);
         StringBuilder print = new StringBuilder();
         for (int i = 0; i < ans.length; i++) {
             print.append(ans[i]).append(", ");
@@ -57,9 +56,90 @@ public class SlidingWindowMax {
         System.out.println(print.toString());
     }
 
+    // Strategy 3:
+    // Similar to strat 2, but instead of storing integer in the PQ, store an array of size 2 [value, index]
+    // This allows you to keep track of the highest int in the window without having to remove all elements at every left increment.
+    // Time Complexity: O(nlogn) - RESULT: 75ms beats 14.94% much faster!
+    // Space Complexity: O(n)
+    public int[] maxSlidingWindow3(int[] nums, int k) {
+        int[] ans = new int[nums.length - k + 1];
+
+        PriorityQueue<int[]> pq = new PriorityQueue<>(new Comparator<int[]>() {
+            @Override
+            public int compare(int[] o1, int[] o2) {
+                return o2[0] - o1[0];           // [value, index] sort by highest value
+            }
+        });
+
+        int left = 0, right = 0;
+
+        // setup initial window
+        while (right < k) {
+            pq.add(new int[]{nums[right], right});
+            right++;
+        }
+        ans[0] = pq.peek()[0];
+        left++;
+
+        while (right < nums.length) {
+            pq.add(new int[]{nums[right], right});
+
+            while (pq.peek()[1] < left) {
+                // remove old max values that are not in current window.
+                pq.poll();
+            }
+
+            ans[right - k + 1] = pq.peek()[0];
+
+            right++;
+            left++;
+        }
+        return ans;
+    }
+
+    // Strategy 2:
+    // Similar to strat 1 but optimize finding new max integer in window by using max heap (priority queue)
+    // The window is the priority queue, so whenever we increment left and right ptr we insert and remove elements in the PQ accordingly.
+    // RESULT: Time out - even slower than strat 1?
+    // Most likely bottlenecked at Comparators and pq.remove
+    public int[] maxSlidingWindow2(int[] nums, int k) {
+        int[] ans = new int[nums.length - k + 1];
+        PriorityQueue<Integer> pq = new PriorityQueue<>(Collections.reverseOrder());
+
+        int left = 0, right = 0;
+
+        // setting up initial window
+        while (right < k) {
+            pq.add(nums[right]);
+            right++;
+        }
+        if (pq.peek() != null) {
+            ans[0] = pq.peek();
+        }
+
+        pq.remove(nums[left]);
+        left++;
+
+        // increment windows across
+        while (right < nums.length) {
+            pq.add(nums[right]);
+            ans[right - k + 1] = pq.peek();     // pq.peek() cannot be null
+
+            pq.remove(nums[left]);
+
+            left++;
+            right++;
+        }
+
+        return ans;
+    }
+
 
     // Strategy 1:
-    // Time Complexity: O(n*k) - RESULT: 1255ms Beats 5.03% (sloww)
+    // Setup a sliding window with left and right ptr.
+    // Keep track of the largest number in that window by using an int[] array (value, frequency)
+    // Everytime the left & right ptr increments update the largest number
+    // Time Complexity: O(n*k) - RESULT: 1255ms Beats 5.03% (sloww) - where k is the size of the window
     // Space Complexity: O(n) - RESULT: 157.34MB Beats 11.93%
     public int[] maxSlidingWindow(int[] nums, int k) {
         int[] ans = new int[nums.length - k + 1];
@@ -89,10 +169,10 @@ public class SlidingWindowMax {
                     windowMax[1]--;
                 }
                 else {
-                    // find new windowMax
+                    // find new windowMax - this needs to be optimized
                     windowMax[0] = Integer.MIN_VALUE;
                     windowMax[1] = 0;
-                    for (int i = left; i <= right; i++) {       // needs to be optimized
+                    for (int i = left; i <= right; i++) {
                         if (nums[i] > windowMax[0]) {
                             windowMax[0] = nums[i];
                             windowMax[1] = 1;

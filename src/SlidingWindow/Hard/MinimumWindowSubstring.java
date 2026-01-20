@@ -54,6 +54,7 @@ public class MinimumWindowSubstring {
     // Similar to strat 2 but this time we only care about chars in string t.
     // RESULT: 121ms - same as strat 2 :(
     public String minWindow3(String s, String t) {
+
         // Edge case
         if (t.length() > s.length()) {
             return "";
