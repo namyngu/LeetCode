@@ -62,7 +62,7 @@ public class LinkedListCycle {
     // As you iterate through each node, check if node already exists in a set, if not add node to set.
     // If node exists in set then there is a cycle otherwise continue until end of linked list.
     // Time Complexity: O(n) - RESULT: 7ms beats 10.26% TODO: optimize further?
-    // Space Complexity: O(n) - RESULT: 46.8MB Beats 68.48%
+    // Space Complexity: O(n) - RESULT: 46.8MB Beats 68.48% TODO: Solve using only O(1) space complexity.
     public boolean hasCycle(ListNode head) {
 
         Set<ListNode> set = new HashSet<>();
