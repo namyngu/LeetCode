@@ -58,11 +58,41 @@ import java.util.Set;
  */
 public class LinkedListCycle {
 
+    // Strategy 2:
+    // Using two pointers (slow & fast pointer), the fast pointer moves 2 steps for every step the slow pointer takes.
+    // If there is a cycle, the fast pointer will loop back around and eventually point to the slow pointer (slow pointer could also loop back around).
+    // If there's no cycle the fast pointer will hit null at the end.
+    // Remember if there is a cycle both pointers will never reach null.
+    // Why fast pointer move at 2 steps? To ensure the fast ptr will definitely land on the slow ptr if there is a cycle.
+    // Time Complexity O(n?) - RESULT: 0ms Beats 100%
+    // Space Complexity O(1) - RESULT: 46.74MB Beats 68.48%
+    public boolean hasCycle2(ListNode head) {
+
+        ListNode fast = head;
+        ListNode slow = head;
+
+        while (fast != null) {
+
+            if (fast.next == null) {
+                return false;
+            }
+
+            fast = fast.next.next;
+            slow = slow.next;
+
+            if (fast == slow) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     // Strategy 1:
     // As you iterate through each node, check if node already exists in a set, if not add node to set.
     // If node exists in set then there is a cycle otherwise continue until end of linked list.
-    // Time Complexity: O(n) - RESULT: 7ms beats 10.26% TODO: optimize further?
-    // Space Complexity: O(n) - RESULT: 46.8MB Beats 68.48% TODO: Solve using only O(1) space complexity.
+    // Time Complexity: O(n) - RESULT: 7ms beats 10.26%
+    // Space Complexity: O(n) - RESULT: 46.8MB Beats 68.48%
     public boolean hasCycle(ListNode head) {
 
         Set<ListNode> set = new HashSet<>();
