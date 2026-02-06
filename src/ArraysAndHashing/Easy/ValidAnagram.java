@@ -43,29 +43,27 @@ class ValidAnagram {
         System.out.println(start.isAnagram2(str1, str2));
     }
 
-    // strategy 1 - sort all the letters in alphabetical order then compare them
-    // Time complexity - O(nlogn), space ~ O(n) but some interviewers think it's O(1)?
-    public boolean isAnagram(String s, String t) {
-        // convert strings to char arrays
-        char[] sChars = s.toCharArray();
-        char[] tChars = t.toCharArray();
-
-        mergeSort(sChars);
-        mergeSort(tChars);
-
-        String sSorted = new String(sChars);
-        String tSorted = new String(tChars);
-
-        if (sSorted.equals(tSorted)) {
-            return true;
-        }
-        else {
+    // Strategy 3: Similar to strat 2
+    public boolean isAnagram3(String s, String t) {
+        if (s.length() != t.length()) {
             return false;
         }
+
+        HashMap<Character, Integer> sMap = new HashMap<>();
+        HashMap<Character, Integer> tMap = new HashMap<>();
+
+        // count occurrences of char and map it.
+        for (int i = 0; i < s.length(); i++) {
+            sMap.put(s.charAt(i), sMap.getOrDefault(s.charAt(i), 0) + 1);
+            tMap.put(t.charAt(i), tMap.getOrDefault(t.charAt(i), 0) + 1);
+        }
+
+        return sMap.equals(tMap);
     }
 
     // Strategy 2 - count the occurrences of each character using a hashmap
-    // Time complexity - O(n), space complexity O(n)
+    // Time complexity - O(n), RESULT: 18ms - beats 14.55% - still too slow.
+    // Space complexity O(n)
     public boolean isAnagram2(String s, String t) {
 
         if (s.length() != t.length()) {
@@ -113,6 +111,30 @@ class ValidAnagram {
 
         return true;
     }
+
+    // strategy 1 - sort all the letters in alphabetical order then compare them
+    // Time complexity - O(nlogn), RESULT: 54ms - beats 5.69% too sloww
+    // space ~ O(n)?
+    public boolean isAnagram(String s, String t) {
+        // convert strings to char arrays
+        char[] sChars = s.toCharArray();
+        char[] tChars = t.toCharArray();
+
+        mergeSort(sChars);
+        mergeSort(tChars);
+
+        String sSorted = new String(sChars);
+        String tSorted = new String(tChars);
+
+        if (sSorted.equals(tSorted)) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+
 
     public char[] mergeSort(char[] array) {
         int length = array.length;

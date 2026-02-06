@@ -44,6 +44,8 @@
  */
 package LinkedList.Easy;
 
+import LinkedList.ListNode;
+
 public class MergeTwoSortedList {
 
     // Strategy 1:

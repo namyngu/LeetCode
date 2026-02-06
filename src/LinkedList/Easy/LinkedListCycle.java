@@ -42,6 +42,8 @@
 
 package LinkedList.Easy;
 
+import LinkedList.ListNode;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -63,9 +65,10 @@ public class LinkedListCycle {
     // If there is a cycle, the fast pointer will loop back around and eventually point to the slow pointer (slow pointer could also loop back around).
     // If there's no cycle the fast pointer will hit null at the end.
     // Remember if there is a cycle both pointers will never reach null.
-    // Why fast pointer move at 2 steps? To ensure the fast ptr will definitely land on the slow ptr if there is a cycle.
+    // Why fast pointer move at 2 steps?
+    // To ensure the fast ptr will definitely land on the slow ptr if there is a cycle, and to minimize # of null checks when we call fast.next
     // Time Complexity O(n?) - RESULT: 0ms Beats 100%
-    // Space Complexity O(1) - RESULT: 46.74MB Beats 68.48%
+    // Space Complexity O(1) - RESULT: 46.74MB Beats 68.48%     - not much difference here, test case probably not enough inputs to notice a difference?
     public boolean hasCycle2(ListNode head) {
 
         ListNode fast = head;

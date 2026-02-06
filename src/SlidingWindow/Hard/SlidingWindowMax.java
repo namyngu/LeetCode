@@ -56,8 +56,11 @@ public class SlidingWindowMax {
         System.out.println(print.toString());
     }
 
+    // Strategy 4:
+    //
+
     // Strategy 3:
-    // Similar to strat 2, but instead of storing integer in the PQ, store an array of size 2 [value, index]
+    // Similar to strat 2, but instead of storing integer in the PQ, store an array of size 2 [value, index] in the PQ.
     // This allows you to keep track of the highest int in the window without having to remove all elements at every left increment.
     // Time Complexity: O(nlogn) - RESULT: 75ms beats 14.94% much faster!
     // Space Complexity: O(n)
@@ -101,7 +104,7 @@ public class SlidingWindowMax {
     // Similar to strat 1 but optimize finding new max integer in window by using max heap (priority queue)
     // The window is the priority queue, so whenever we increment left and right ptr we insert and remove elements in the PQ accordingly.
     // RESULT: Time out - even slower than strat 1?
-    // Most likely bottlenecked at Comparators and pq.remove
+    // Most likely bottlenecked at pq.remove
     public int[] maxSlidingWindow2(int[] nums, int k) {
         int[] ans = new int[nums.length - k + 1];
         PriorityQueue<Integer> pq = new PriorityQueue<>(Collections.reverseOrder());

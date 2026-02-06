@@ -32,6 +32,8 @@ package LinkedList.Easy;
 //
 //Follow up: A linked list can be reversed either iteratively or recursively. Could you implement both?
 
+import LinkedList.ListNode;
+
 /**
  * Definition for singly-linked list.
  * public class ListNode {
