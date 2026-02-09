@@ -59,7 +59,51 @@ public class ReorderList {
     // split the list in half, find middle by using fast & slow pointer.
     // reverse the second half of the list.
     // merge the two halves
+    // Time Complexity: O(n)
+    // RESULT: 2ms - beats 89% - much better!
+    // Space complexity: O(1)
+    // RESULT: 49.4MB beats 71.8%
     public void reorderList3(ListNode head) {
+        // Edge case
+        if (head == null || head.next == null) return;
+
+        // Find middle
+        ListNode slow = head;
+        ListNode fast = head;
+
+        // 1 -> 2 -> 3 -> 4
+        // 1 -> 2 -> 3 -> 4 -> 5
+        while (fast.next != null && fast.next.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+
+        // Reverse second half
+        ListNode second = slow.next;
+        slow.next = null;
+
+        ListNode prevNode = null;
+        while (second != null) {
+            ListNode nextRef = second.next;     // reference to the next node;
+            second.next = prevNode;
+            prevNode = second;
+            second = nextRef;       // increment to next node.
+        }
+
+        // Merge the two halves.
+        ListNode secondHalf = prevNode;
+        ListNode firstHalf = head;
+
+        while (secondHalf != null) {
+            ListNode nextRef1 = firstHalf.next;
+            ListNode nextRef2 = secondHalf.next;
+
+            firstHalf.next = secondHalf;
+            secondHalf.next = nextRef1;
+
+            firstHalf = nextRef1;       // increment
+            secondHalf = nextRef2;      // increment
+        }
 
     }
 
@@ -69,7 +113,7 @@ public class ReorderList {
     // Similar to strat 1 except there's no 3rd list, we create a reverse list and traverse the main list, creating new links everytime
     // Time Complexity: O(n)
     // RESULT: 3ms - Beats 17.27%
-    // Space Complexity: O(n)
+    // Space Complexity: O(2n)
     // RESULT: 51.35Mb beats 6.5%
     public void reorderList2(ListNode head) {
 
