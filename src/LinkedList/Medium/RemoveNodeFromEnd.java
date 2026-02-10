@@ -45,6 +45,47 @@ import LinkedList.ListNode;
  */
 public class RemoveNodeFromEnd {
 
+    // Strategy 2:
+    // Further optimize even though strat 1 is already 0ms
+    // Idea: We have two pointers: pointer1 at index 0, pointer2 at index n
+    // By the time pointer2 reaches the end of list, pointer1 will be exactly one node behind the nth node.
+    // Time Complexity: O(n) - only a single run required.
+    // RESULT: 0ms - beats 100% should be faster than strat 1.
+    // Time Complexity: O(1)
+    public ListNode remvoeNthFromEnd2(ListNode head, int n) {
+        if (head == null || head.next == null) return null;
+
+        // Set pointer2 to be at index n.
+        ListNode pointer1 = head;
+        ListNode pointer2 = head;
+        for (int i = 0; i < n; i++) {
+            pointer2 = pointer2.next;
+        }
+
+        // Edge case: n = size of linked list, cannot access index n
+        if (pointer2 == null) return head.next;
+
+
+        // Increment each pointer until end of linked list.
+        while (pointer2.next != null) {
+            pointer1 = pointer1.next;
+            pointer2 = pointer2.next;
+        }
+
+        // Remove nth node
+        ListNode nthNode = pointer1.next;
+
+        // Edge case
+        if (nthNode.next == null) {
+            pointer1.next = null;
+            return head;
+        }
+
+        pointer1.next = nthNode.next;
+        return head;
+    }
+
+
     // Strategy 1:
     // Use a two past approach. First past to figure out length of linked list, second past will rearrange the links at L - n.
     // Time Complexity: O(2n)
