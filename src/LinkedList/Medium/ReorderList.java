@@ -60,7 +60,7 @@ public class ReorderList {
     // reverse the second half of the list.
     // merge the two halves
     // Time Complexity: O(n)
-    // RESULT: 2ms - beats 89% - much better!
+    // RESULT: 2ms - beats 89% - much better
     // Space complexity: O(1)
     // RESULT: 49.4MB beats 71.8%
     public void reorderList3(ListNode head) {
