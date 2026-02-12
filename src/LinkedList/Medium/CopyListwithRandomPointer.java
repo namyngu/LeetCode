@@ -67,27 +67,10 @@ class Node {
 */
 public class CopyListwithRandomPointer {
 
-    // Strategy 0:
-    // Use a two past approach. First past we create a new list keeping all random ptr = null.
-    // Second past, we assign random ptr to the copied list
-    // This will NOT WORK, why? Since we cannot use any of the old nodes, we cannot copy the random ptr from the first list and directly paste it into the copied list.
-    // If we do create a new node with the same values for our random ptr then we run into the problem of not knowing where it is in the list (index).
-
     // Strategy 2:
-    // Let's call the ptr to the original list listPtr and the ptr to the copy list, copyPtr.
-    // Create a hashmap<Node, List<Node>>, with the key be nodes from the original list and value be a list of nodes from the copied list.
-    // The hashmap contains entries of listPtr we have passed through and all the nodes from the cop
-    // Traverse the listPtr and copyPtr simultaneously.
-    // At every increment:
-    // 2. Check if hashmap.contains(listPtr)
-    //      if true, copiedNodes = hashmap.get(listPtr)
-    //      create a new node with same values as listPtr and make every node.random in the copiedNodes point to it.
-    //      empty copiedNodes.
-
-    //      else add listPtr to hashmap with an empty array as value.
-    // 3. check if listPtr.random exists in the set (if we have seen this random node before),
-    //      if not, add <listPtr.random, copyPtr> to hashmap.
-    public Node copyRandomList(Node head) {
+    // Similar to strat 1 but we can optimize further by traversing the list once.
+    //
+    public Node copyRandomList2(Node head) {
 
         Node headCopy = new Node(head.val);
         Map<Node,Node> map = new HashMap<>();
@@ -112,12 +95,17 @@ public class CopyListwithRandomPointer {
     // Using two past approach.
     // First past, store every node and its index in a hashmap<Node, Index> from original list and do the same in another hashmap for the copyList.
     // The hashmap pairings are: hashmap1 - Node : Index and hashmap2 - Index : Node.
-    // Second past, at each incrememt:
+    // Second past, at each increment:
     // Get index of random node by: hashmap1.get(listPtr.random)
     // Find corresponding node in the copied list by using hashmap2.
     // assign node.random for copied list.
-
-    public Node copyRandomList2(Node head) {
+    // Time Complexity: O(2n)
+    // Result: 0 ms - beats 100%
+    // Space Complexity: O(3n)
+    // Result: 46.68MB - beats 49.14%
+    public Node copyRandomList(Node head) {
+        // Edge case
+        if (head == null) return null;
 
         Map<Node, Integer> map1 = new HashMap<>();
         Map<Integer, Node> map2 = new HashMap<>();
@@ -125,32 +113,50 @@ public class CopyListwithRandomPointer {
         Node list1 = head;
         Node list2 = headCopy;
 
-        // First node
-        // Edge case (size <= 1)
-        if (list1 == null) return list1;
-        if (list1.next == null) return list1;
 
         int index = 0;
-        map1.put(list1, index);
-        map2.put(index, list2);
-
-        list2.next = new Node(list1.next.val);
-
-        // increment
-        list1 = list1.next;
-        list2 = list2.next;
-        index++;
-
         // First past
-        while (list1.next != null) {
+        while (list1 != null) {
             map1.put(list1, index);
             map2.put(index, list2);
+
+            // Increment
+            if (list1.next == null) {
+                break;
+            }
+            list2.next = new Node(list1.next.val);
+            list1 = list1.next;
+            list2 = list2.next;
+            index++;
         }
 
         // Second past
+        list1 = head;
+        list2 = headCopy;
+        while (list1 != null) {
+            if (list1.random == null) {
+                list2.random = null;
 
+                list1 = list1.next;
+                list2 = list2.next;
+                continue;
+            }
 
+            int indexOfRandom = map1.get(list1.random);
+
+            list2.random = map2.get(indexOfRandom);
+
+            // Increment
+            list1 = list1.next;
+            list2 = list2.next;
+        }
 
         return headCopy;
     }
+
+    // Strategy 0:
+    // Use a two past approach. First past we create a new list keeping all random ptr = null.
+    // Second past, we assign random ptr to the copied list
+    // This will NOT WORK, why? Since we cannot use any of the old nodes, we cannot copy the random ptr from the first list and directly paste it into the copied list.
+    // If we do create a new node with the same values for our random ptr then we run into the problem of not knowing where it is in the list (index).
 }
