@@ -75,7 +75,7 @@ public class RemoveNodeFromEnd {
         // Remove nth node
         ListNode nthNode = pointer1.next;
 
-        // Edge case
+        // Edge case: n is at the end of the list
         if (nthNode.next == null) {
             pointer1.next = null;
             return head;
