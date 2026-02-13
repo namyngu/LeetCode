@@ -67,9 +67,10 @@ class Node {
 */
 public class CopyListwithRandomPointer {
 
-    // Strategy 2:
+    // Strategy 2: TODO: Optimize further from strat 1
     // Similar to strat 1 but we can optimize further by traversing the list once.
-    //
+    // Idea: create 3 hashmaps. The first 2 hashmaps are same from strat 1.
+    // The third hashmap entries stores the Node.random from list1 and a List<Node> from list2 that needs to be assigned to a copy of that Node.random from list1.
     public Node copyRandomList2(Node head) {
 
         Node headCopy = new Node(head.val);
@@ -92,10 +93,10 @@ public class CopyListwithRandomPointer {
     }
 
     // Strategy 1:
-    // Using two past approach.
-    // First past, store every node and its index in a hashmap<Node, Index> from original list and do the same in another hashmap for the copyList.
+    // Using two pass approach.
+    // First pass, store every node and its index in a hashmap<Node, Index> from original list and do the same in another hashmap for the copyList.
     // The hashmap pairings are: hashmap1 - Node : Index and hashmap2 - Index : Node.
-    // Second past, at each increment:
+    // Second pass, at each increment:
     // Get index of random node by: hashmap1.get(listPtr.random)
     // Find corresponding node in the copied list by using hashmap2.
     // assign node.random for copied list.
@@ -115,7 +116,7 @@ public class CopyListwithRandomPointer {
 
 
         int index = 0;
-        // First past
+        // First pass
         while (list1 != null) {
             map1.put(list1, index);
             map2.put(index, list2);
@@ -130,7 +131,7 @@ public class CopyListwithRandomPointer {
             index++;
         }
 
-        // Second past
+        // Second pass
         list1 = head;
         list2 = headCopy;
         while (list1 != null) {
@@ -155,8 +156,8 @@ public class CopyListwithRandomPointer {
     }
 
     // Strategy 0:
-    // Use a two past approach. First past we create a new list keeping all random ptr = null.
-    // Second past, we assign random ptr to the copied list
+    // Use a two pass approach. First pass we create a new list keeping all random ptr = null.
+    // Second pass, we assign random ptr to the copied list
     // This will NOT WORK, why? Since we cannot use any of the old nodes, we cannot copy the random ptr from the first list and directly paste it into the copied list.
     // If we do create a new node with the same values for our random ptr then we run into the problem of not knowing where it is in the list (index).
 }
