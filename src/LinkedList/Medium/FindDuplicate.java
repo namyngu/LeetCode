@@ -79,6 +79,7 @@ public class FindDuplicate {
         slow = nums[slow];
         fast = nums[nums[fast]];
 
+        // increment the pointers until they meet.
         while (fast != slow) {
             slow = nums[slow];
             fast = nums[nums[fast]];
