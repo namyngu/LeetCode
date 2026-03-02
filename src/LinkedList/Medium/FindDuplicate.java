@@ -43,7 +43,15 @@ package LinkedList.Medium;
 import java.util.HashSet;
 import java.util.Set;
 
+// This is one of those problems where you have to watch a vid for the optimal strategy.
 public class FindDuplicate {
+
+    public static void main(String[] args) {
+        FindDuplicate start = new FindDuplicate();
+        int[] input = {1,3,4,2,2};
+
+        System.out.println("Answer: " + start.findDuplicate2(input));   // Expected 2
+    }
 
     // Strategy 2:
     // Using fast and slow pointers
@@ -56,10 +64,30 @@ public class FindDuplicate {
     // If there’s a cycle, they will eventually meet.
     // Once they meet, we start a new pointer from the beginning:
     //
-    // Move both pointers one step at a time.
+    // Move both pointers (slow ptr & new ptr) one step at a time.
     // The point where they meet again is the duplicate number (the entry point of the cycle)
     public int findDuplicate2(int[] nums) {
+        int slow = 0;
+        int fast = 0;
 
+        // initial move
+        slow = nums[slow];
+        fast = nums[nums[fast]];
+
+        while (fast != slow) {
+            slow = nums[slow];
+            fast = nums[nums[fast]];
+        }
+
+        // start new ptr
+        int newPTR = 0;
+
+        while (newPTR != slow) {
+            slow = nums[slow];
+            newPTR = nums[newPTR];
+        }
+
+        return nums[slow];
     }
 
     // Strategy 1:
