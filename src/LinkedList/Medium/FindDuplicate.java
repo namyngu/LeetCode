@@ -66,6 +66,11 @@ public class FindDuplicate {
     //
     // Move both pointers (slow ptr & new ptr) one step at a time.
     // The point where they meet again is the duplicate number (the entry point of the cycle)
+
+    // Time Complexity: O(n)
+    // RESULT: 4ms - Beats 91.47%
+    // Space Complexity: O(1)
+    // RESULT: 83.1MB Beats 33.3% (most ppl got this)
     public int findDuplicate2(int[] nums) {
         int slow = 0;
         int fast = 0;
@@ -87,7 +92,7 @@ public class FindDuplicate {
             newPTR = nums[newPTR];
         }
 
-        return nums[slow];
+        return slow;
     }
 
     // Strategy 1:
