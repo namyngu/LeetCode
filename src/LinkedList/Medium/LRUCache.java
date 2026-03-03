@@ -44,47 +44,54 @@
 
 package LinkedList.Medium;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.Queue;
+import java.util.*;
 
+
+// Strategy:
+// Use a hashmap to store key-value pairs.
+// To evict least recently used key when number of keys exceeds the capacity, we'll use a doubly linked list.
+// In Java, LinkedList<>() implements deque is a built-in deque that's already a doubly linked list.
+// LRU key is at the head and MRU (most recently used) key is at the tail of the linked list.
+// To remove a key at O(1) time we have a another hashmap that stores the key and index in the linked list.
 public class LRUCache {
     private int capacity;
     private int size = 0;
-    HashMap<Integer,Integer> map;
-    Deque<Integer> priorityDeque = new ArrayDeque<>();      // LRU is first in queue, MRU is last in queue
+    HashMap<Integer,Integer> keyValue;
+    Deque<Integer> lruList;
+    HashMap<Integer, Integer> keyIndex;
 
     public LRUCache(int capacity) {
         this.capacity = capacity;
-        map = new HashMap<>(capacity);
+        keyValue = new HashMap<>(capacity);
+        lruList = new LinkedList<>();       // LinkedList<>() not ArrayDeque<>()
+        keyIndex = new HashMap<>();
     }
 
     public int get(int key) {
-        return map.getOrDefault(key, -1);
+        return keyValue.getOrDefault(key, -1);
     }
 
     public void put(int key, int value) {
-        if (size < capacity) {
-            // Change priority
-            // TODO: This is O(n) find a better solution.
-            if (!map.containsKey(key)) {
-                priorityDeque.addLast(key);
-            }
-            else {
-                priorityDeque.remove(key);
-                priorityDeque.addLast(key);
-            }
-
-            map.put(key, value);
+        if (keyValue.containsKey(key)) {
+            // key already exists, update its value and update its priority.
+            keyValue.put(key, value);
+            lruList.remove(keyIndex.get(key));
+            lruList.addLast(key);
+            keyIndex.put(key, lruList.size() - 1);
+        }
+        else if (size < capacity) {
+            // if key doesn't exist and no. of keys doesn't exceed capacity
+            lruList.addLast(key);
+            keyIndex.put(key, lruList.size() - 1);
             size++;
         }
         else {
-            // no. of keys exceed capacity
+            // if key doesn't exist and no. of keys exceed capacity
+
 
         }
 
-
+        // TODO: EEEP can't use index? As you will have to update the index of all keys which takes O(n) time.
 
 
     }
