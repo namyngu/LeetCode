@@ -59,7 +59,7 @@ import java.util.*;
 
 // Time Complexity: O(1) for get and put operations
 // RESULT: 43ms - beats 93.21%!
-// Space Complexity: O(n) where n is the number of unique put operations.
+// Space Complexity: O(n) where n is the capacity.
 // RESULT: 130.84MB - beats 80.88%
 public class LRUCache {
     public class Node {
