@@ -42,6 +42,14 @@
 //0 <= value <= 105
 //At most 2 * 105 calls will be made to get and put.
 
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache obj = new LRUCache(capacity);
+ * int param_1 = obj.get(key);
+ * obj.put(key,value);
+ */
+
+
 package LinkedList.Medium;
 
 import java.util.*;
@@ -54,7 +62,7 @@ import java.util.*;
 // NOTE: Practically you'd use the built-in LinkedHashMap data structure,
 // but for the leetcode example we have to create our own class for a doubly linked list.
 // The least recently used (eldest) key is at the head and the youngest key is at the tail of the linked list.
-// To make code cleaner and much easier to implement we have an empty node at the head and tail of the doubly
+// To make code cleaner and much easier to implement (avoiding Null Pointer Exceptions) we have an empty node at the head and tail of the doubly
 // linked list to point to the LRU and MRU respectively.
 
 // Time Complexity: O(1) for get and put operations
@@ -154,10 +162,3 @@ public class LRUCache {
         }
     }
 }
-
-/**
- * Your LRUCache object will be instantiated and called as such:
- * LRUCache obj = new LRUCache(capacity);
- * int param_1 = obj.get(key);
- * obj.put(key,value);
- */
