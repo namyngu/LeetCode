@@ -18,9 +18,9 @@
 //
 //Input
 //["LRUCache", "put", "put", "get", "put", "get", "put", "get", "get", "get"]
-//[[2], [1, 1], [2, 2], [1], [3, 3], [2], [4, 4], [1], [3], [4]]
+//[[2],       [1, 1], [2, 2], [1], [3, 3],  [2],  [4, 4], [1],   [3],   [4]]
 //Output
-//[null, null, null, 1, null, -1, null, -1, 3, 4]
+//[null,        null,   null,   1,  null,   -1,    null,  -1,     3,     4]
 //
 //Explanation
 //LRUCache lRUCache = new LRUCache(2);
@@ -49,51 +49,109 @@ import java.util.*;
 
 // Strategy:
 // Use a hashmap to store key-value pairs.
-// To evict least recently used key when number of keys exceeds the capacity, we'll use a doubly linked list.
-// In Java, LinkedList<>() implements deque is a built-in deque that's already a doubly linked list.
-// LRU key is at the head and MRU (most recently used) key is at the tail of the linked list.
-// To remove a key at O(1) time we have a another hashmap that stores the key and index in the linked list.
+// To evict least recently used key when number of keys exceeds the capacity in O(1) time,
+// we link the entries of the hashmap with a doubly linked list.
+// NOTE: Practically you'd use the built-in LinkedHashMap data structure,
+// but for the leetcode example we have to create our own class for a doubly linked list.
+// The least recently used (eldest) key is at the head and the youngest key is at the tail of the linked list.
+// To make code cleaner and much easier to implement we have an empty node at the head and tail of the doubly
+// linked list to point to the LRU and MRU respectively.
+
+// Time Complexity: O(1) for get and put operations
+// RESULT: 43ms - beats 93.21%!
+// Space Complexity: O(n) where n is the number of unique put operations.
+// RESULT: 130.84MB - beats 80.88%
 public class LRUCache {
-    private int capacity;
+    public class Node {
+        int key;
+        int value;
+        Node prev;
+        Node next;
+
+        public Node() {}
+
+        public Node(int value) {
+            this.value = value;
+        }
+
+        public Node(int key, int value) {
+            this.key = key;
+            this.value = value;
+        }
+    }
+
+    private final int CAPACITY;
     private int size = 0;
-    HashMap<Integer,Integer> keyValue;
-    Deque<Integer> lruList;
-    HashMap<Integer, Integer> keyIndex;
+    Map<Integer,Node> lruMap;
+    Node head = new Node();
+    Node tail = new Node();
 
     public LRUCache(int capacity) {
-        this.capacity = capacity;
-        keyValue = new HashMap<>(capacity);
-        lruList = new LinkedList<>();       // LinkedList<>() not ArrayDeque<>()
-        keyIndex = new HashMap<>();
+        this.CAPACITY = capacity;
+        lruMap = new HashMap<>(capacity);
+        head.next = tail;
+        tail.prev = head;
     }
 
     public int get(int key) {
-        return keyValue.getOrDefault(key, -1);
+        Node node = lruMap.getOrDefault(key, new Node(-1));
+
+        if (node.value != -1) {
+            // move node to tail.
+            node.prev.next = node.next;
+            node.next.prev = node.prev;
+            node.next = tail;
+            node.prev = tail.prev;
+            tail.prev.next = node;
+            tail.prev = node;
+        }
+        return node.value;
     }
 
     public void put(int key, int value) {
-        if (keyValue.containsKey(key)) {
-            // key already exists, update its value and update its priority.
-            keyValue.put(key, value);
-            lruList.remove(keyIndex.get(key));
-            lruList.addLast(key);
-            keyIndex.put(key, lruList.size() - 1);
+        if (lruMap.containsKey(key)) {
+            // update value
+            Node node = lruMap.get(key);
+            node.value = value;
+
+            // move node to tail.
+            node.prev.next = node.next;
+            node.next.prev = node.prev;
+            node.next = tail;
+            node.prev = tail.prev;
+            tail.prev.next = node;
+            tail.prev = node;
         }
-        else if (size < capacity) {
-            // if key doesn't exist and no. of keys doesn't exceed capacity
-            lruList.addLast(key);
-            keyIndex.put(key, lruList.size() - 1);
+        else if (size < CAPACITY) {
+            // key doesn't exist and size < capacity
+            Node node = new Node(key, value);
+            // insert node at tail
+            node.next = tail;
+            node.prev = tail.prev;
+            tail.prev.next = node;
+            tail.prev = node;
+            lruMap.put(key, node);
+
             size++;
         }
         else {
-            // if key doesn't exist and no. of keys exceed capacity
+            // key doesn't exist and size exceeds capacity.
+            // Evict LRU - remove from hashmap then remove from linked list.
+            lruMap.remove(head.next.key);       // this is why we need the node to store the key.
+            head.next.next.prev = head;
+            head.next = head.next.next;
 
+            // Create new node.
+            Node node = new Node(key, value);
+            lruMap.put(key, node);
 
+            // insert node at tail
+            node.next = tail;
+            node.prev = tail.prev;
+            tail.prev.next = node;
+            tail.prev = node;
+            lruMap.put(key, node);
         }
-
-        // TODO: EEEP can't use index? As you will have to update the index of all keys which takes O(n) time.
-
-
     }
 }
 
