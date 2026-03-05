@@ -53,7 +53,8 @@ class TwoSum {
     }
 
     // Strategy1 Brute force - iterate through the array and add up all the sums - try not to repeat.
-    // shit strategy O(n^2)
+    // Time Complexity: O(n^2) - RESULT: 44ms Beats 34.86% - too sloww
+    // Space Complexity: O(1) - RESULT: 44.72MB Beats 99.96%
     public int[] twoSum(int[] nums, int target) {
 
         for (int i = 0; i < nums.length - 1; i++) {
@@ -68,7 +69,9 @@ class TwoSum {
 
     //Strategy 2 - We can use hashmap to check if there exists a number in the nums array that will sum with our
     // current number and add up to the target.
-    //Time Complexity O(n), Space complexity O(n)
+    //Time Complexity O(n) - RESULT: 2ms Beats 99.15%
+    //
+    // Space complexity O(n) - RESULT: 45.04MB Beats 99.95%
 
     public int[] twoSum2(int[] nums, int target) {
 

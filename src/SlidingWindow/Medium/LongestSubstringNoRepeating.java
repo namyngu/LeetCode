@@ -41,8 +41,47 @@ import java.util.Set;
 
 public class LongestSubstringNoRepeating {
 
+    // Strategy 2: Neetcode solution, similar to your idea except using two pointers instead of dequeue
+    // Time Complexity: O(n) - RESULT 6ms - Beats 67.18% same as strat 1
+    // Space Complexity: O(n)
+    public int lengthOfLongestSubstring2(String s) {
+        int left = 0;
+        int right = 0;
+        int maxL = 0;
+
+        Set<Character> set = new HashSet<>();
+
+        while (right <= s.length() - 1) {
+            Character ch = s.charAt(right);
+            if (!set.contains(ch)) {
+                set.add(ch);
+
+                maxL = Math.max(maxL, right - left + 1);
+
+                right++;
+            }
+            else {
+                while (true) {
+                    if (s.charAt(left) == ch) {
+                        set.remove(s.charAt(left));
+                        left++;
+                        break;
+                    }
+                    else {
+                        set.remove(s.charAt(left));
+                        left++;
+                    }
+                }
+            }
+        }
+
+        return maxL;
+    }
+
+    // Strategy 1
     // Time Complexity: O(n)
     // RESULT: 6ms - Beats 68.77%
+    // Doesn't really use sliding window
     public int lengthOfLongestSubstring(String s) {
 
         int len = s.length();

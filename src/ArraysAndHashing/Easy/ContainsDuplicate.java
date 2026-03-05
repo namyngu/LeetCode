@@ -10,6 +10,9 @@ class ContainsDuplicate {
         System.out.println(isDuplicate);
     }
 
+    // Strategy 1:
+    // Time Complexity: O(n) - RESULT: 10ms Beats 99.19%
+    // Space Complexity: O(n) - RESULT: 62.08MB Beats 99.94%
     public boolean containsDuplicate(int[] nums) {
         HashSet<Integer> isDuplicate = new HashSet<>();
 
