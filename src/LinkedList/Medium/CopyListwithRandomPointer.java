@@ -100,7 +100,7 @@ public class CopyListwithRandomPointer {
     // Get index of random node by: hashmap1.get(listPtr.random)
     // Find corresponding node in the copied list by using hashmap2.
     // assign node.random for copied list.
-    // Time Complexity: O(2n)
+    // Time Complexity: O(2*n)
     // Result: 0 ms - beats 100%
     // Space Complexity: O(3n)
     // Result: 46.68MB - beats 49.14%

@@ -5,7 +5,7 @@ public class ListNode {
     public ListNode next;
 
     // Constructors
-    ListNode() {}
+    public ListNode() {}
 
     public ListNode(int val) {
         this.val = val;
