@@ -55,13 +55,73 @@ public class MergeKSortedList {
     // As we iterate through the lists we merge the current linked list with the previous one and sort it.
     // Then on the next iteration, we merge the new linked list with the previous merged one!.
     // Repeat this until list is complete.
+
+    // Time Complexity: O(n*k)
+    // RESULT: 120ms beat 5.07% slower than strat1 somehow :(
+    // Space Complexity: O(n)
+    // RESULT: 46.86MB beats 62.69% still worse than strat1
     public ListNode mergeKLists2(ListNode[] lists) {
         // Edge case
         if (lists.length == 0) {
             return null;
         }
+        else if (lists.length == 1) {
+            return lists[0];
+        }
+
+        ListNode mergeList = null;
+        for (int i = 0; i < lists.length; i++) {
+            // merge current list with previous list
+            mergeList = mergeLists(mergeList, lists[i]);
+        }
+
+        return mergeList;
+    }
+
+    // merge two sorted lists and return a merge sorted list.
+    public ListNode mergeLists(ListNode list1, ListNode list2) {
+        if (list1 == null) {
+            return list2;
+        }
+        else if (list2 == null) {
+            return list1;
+        }
 
 
+        ListNode node;
+        ListNode dummyHead = new ListNode();
+        if (list1.val <= list2.val) {
+            node = list1;
+            list1 = list1.next;
+        } else {
+            node = list2;
+            list2 = list2.next;
+        }
+
+        dummyHead.next = node;
+
+        while (list1 != null && list2 != null) {
+            if (list1.val <= list2.val) {
+                node.next = list1;
+                node = node.next;
+                list1 = list1.next;
+            }
+            else {
+                node.next = new ListNode(list2.val);
+                node = node.next;
+                list2 = list2.next;
+            }
+        }
+
+        if (list1 == null) {
+            node.next = list2;
+        }
+        else {
+            node.next = list1;
+        }
+
+
+        return dummyHead.next;
     }
 
     // Strategy 1:
@@ -88,12 +148,12 @@ public class MergeKSortedList {
         }
 
         // Edge case - no nodes
-        if (sortedArray.size() == 0) {
+        if (sortedArray.isEmpty()) {
             return null;
         }
 
         // sort the array
-        Collections.sort(sortedArray, (a,b) -> a - b);
+        sortedArray.sort((a, b) -> a - b);
 
         // convert back to linked list and return it.
         ListNode head = new ListNode(sortedArray.get(0));
