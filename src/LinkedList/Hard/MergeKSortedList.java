@@ -47,9 +47,53 @@ import LinkedList.ListNode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.PriorityQueue;
 
 // Not clear if we can create a new merged linked list and return that or merge existing list into one list, then return that.
 public class MergeKSortedList {
+
+    // Strategy 3:
+    // 1. Add all the head nodes of the linked lists into a priority queue that is ordered from smallest to largest value.
+    // 2. Retrieve the smallest node in that priority queue and add it to the new merged list.
+    // 3. If that smallest node has a next node, add that to the priority queue.
+    // 4. Remove the smallest node
+    // Repeat steps 2-4.
+    // Analogy: Imagine lines of people, each sorted by height.
+    // To form one single line sorted by height, you look at the person at the front of every line.
+    // You pick the shortest one and put them in the new line.
+    // Then, the person who was standing behind them moves to the front of their respective line, and you repeat the process.
+
+    // Time Complexity: O(k*n) where k is the number of lists and n is the average linked list length
+    // RESULT: 4ms - beats 80.63%
+    // Space Complexity: O(k*n)
+    // RESULT: 46.97MB - beats 43.11%
+    public ListNode mergeKLists3(ListNode[] lists) {
+
+        PriorityQueue<ListNode> que = new PriorityQueue<>((a,b) -> a.val - b.val);
+
+        for (ListNode node: lists) {
+            if (node != null) {
+                que.add(node);
+            }
+        }
+
+        // new merged list
+        ListNode dummy = new ListNode();
+        ListNode tail = dummy;
+
+        while(!que.isEmpty()) {
+            ListNode smallest = que.poll();
+            tail.next = smallest;
+            tail = tail.next;
+
+            // add next node in line to the que
+            if (smallest.next != null) {
+                que.add(smallest.next);
+            }
+        }
+
+        return dummy.next;
+    }
 
     // Strategy 2:
     // As we iterate through the lists we merge the current linked list with the previous one and sort it.
