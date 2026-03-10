@@ -54,10 +54,9 @@ public class MergeKSortedList {
 
     // Strategy 3:
     // 1. Add all the head nodes of the linked lists into a priority queue that is ordered from smallest to largest value.
-    // 2. Retrieve the smallest node in that priority queue and add it to the new merged list.
+    // 2. Retrieve the smallest node (and remove it) from the priority queue and add it to the new merged list.
     // 3. If that smallest node has a next node, add that to the priority queue.
-    // 4. Remove the smallest node
-    // Repeat steps 2-4.
+    // Repeat steps 2-3.
     // Analogy: Imagine lines of people, each sorted by height.
     // To form one single line sorted by height, you look at the person at the front of every line.
     // You pick the shortest one and put them in the new line.
