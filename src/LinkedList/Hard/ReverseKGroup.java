@@ -36,18 +36,19 @@ import java.util.List;
 
 public class ReverseKGroup {
 
-    // Strategy 1:
+    // Strategy 1: Brute Force
     // Traverse and store k nodes in a list
-    // Traverse the list in reverse and update the node links.
-    // The last node in the sublist then points to the next k list (after it is reversed use recursion!)
+    // Create another list and store the k nodes in reverse
+    // Convert list into a linked list
+    // Time Complexity: O(n)
+    // RESULT: 4ms - beats 2.18%
+    // Space Complexity: O(n)
+    // RESULT: 46.20MB - beats 93.19%
     public ListNode reverseKGroup(ListNode head, int k) {
         // Edge case
         if (k == 1) {
             return head;
         }
-
-        ListNode dummy = new ListNode();
-        dummy.next = head;
 
         ListNode currNode = head;
 
@@ -58,9 +59,33 @@ public class ReverseKGroup {
             currNode = currNode.next;
         }
 
-        for (int i = 0; i < linkedList.size() / k; i += k) {
+        // Reverse k nodes in another list
+        List<ListNode> reverseKGroup = new ArrayList<>();
 
+        for (int i = 0; i < linkedList.size() - (linkedList.size() % k); i += k) {
+            for (int j = k - 1; j >= 0; j--) {
+                reverseKGroup.add(linkedList.get(i + j));
+            }
         }
+
+        for (int i = linkedList.size() - (linkedList.size() % k); i < linkedList.size(); i++) {
+            reverseKGroup.add(linkedList.get(i));
+        }
+
+        // Convert arraylist back to linked list.
+        int index = 0;
+        for (ListNode node : reverseKGroup) {
+            if (index + 1 < reverseKGroup.size()) {
+                node.next = reverseKGroup.get(index + 1);
+            }
+            else if (index + 1 == reverseKGroup.size()) {
+                node.next = null;
+            }
+
+            index++;
+        }
+
+        return reverseKGroup.get(0);
     }
 
     // Helper function - reverses the linked list
