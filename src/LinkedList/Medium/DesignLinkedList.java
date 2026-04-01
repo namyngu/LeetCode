@@ -114,6 +114,14 @@ public class DesignLinkedList {
 		if (index > length || index < 0) {
 			return;
 		}
+		else if (index == length) {
+			addAtTail(val);
+			return;
+		}
+		else if (index == 0) {
+			addAtHead(val);
+			return;
+		}
 
 		int n = 0;
 		ListNode cur = head.next;
