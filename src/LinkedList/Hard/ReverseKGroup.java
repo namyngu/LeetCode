@@ -36,6 +36,104 @@ import java.util.List;
 
 public class ReverseKGroup {
 
+	public static void main(String[] args){
+		ReverseKGroup start = new ReverseKGroup();
+		ListNode input = start.generateInputs(new int[]{1,2,3,4,5,6});
+
+		ListNode res = start.reverseKGroup2(input, 3);
+		while (res != null) {
+			System.out.print(res.val + " -> ");
+			res = res.next;
+		}
+	}
+
+	// Generates inputs for debugging
+	// Returns the head of the linked list.
+	public ListNode generateInputs(int[] arr) {
+		if (arr.length == 0) {
+			return null;
+		}
+		ListNode dummy = new ListNode(0);
+		ListNode prev = dummy;
+		for (int i = 0; i < arr.length; i++) {
+			ListNode curr = new ListNode(arr[i]);
+			prev.next = curr;
+			prev = curr;
+		}
+
+		return dummy.next;
+	}
+
+
+
+	// Strategy 2: Reverse nodes in place
+	// TODO: Finish strat 2
+	// Dummy node points to the head of the linked list.
+	// Need 2 more dummy nodes:
+	// One points to the head of the next k group and one points to the tail of the current group.
+	public ListNode reverseKGroup2(ListNode head, int k) {
+		// Edge case
+		if (k == 1) {
+			return head;
+		}
+
+		ListNode dummy = new ListNode();
+		dummy.next = head;
+
+		ListNode curr = head;			// use this ptr to traverse the linked list.
+		ListNode nxtGroup;				// points to the head of the next group.
+		ListNode prevGroup = dummy;		// points to the tail of the previous group.
+
+
+		while (true) {
+			// Get the kth node
+			ListNode kth = getKth(curr, k);
+			if (kth == null) {
+				// Don't reverse, end of list
+				prevGroup.next = curr;
+
+				return dummy.next;
+			}
+
+			nxtGroup = kth.next;
+
+			// Reverse k group
+			int counter = 1;
+			ListNode prev = dummy;
+
+			while (counter <= k) {
+				if (counter == k) {
+					prevGroup.next = curr;
+				}
+				else if (counter == 1) {
+					prevGroup = curr;
+					ListNode nxt = curr.next;
+					curr.next = nxtGroup;
+					prev = curr;
+					curr = nxt;
+					counter++;
+
+					continue;
+				}
+
+				ListNode nxt = curr.next;
+				curr.next = prev;
+				prev = curr;
+				curr = nxt;
+				counter++;
+			}
+		}
+	}
+
+	// Helper function - gets the kth node
+	ListNode getKth(ListNode curr, int k) {
+		while (curr != null && k > 0) {
+			curr = curr.next;
+			k--;
+		}
+		return curr;
+	}
+
     // Strategy 1: Brute Force
     // Traverse and store k nodes in a list
     // Create another list and store the k nodes in reverse
@@ -87,18 +185,4 @@ public class ReverseKGroup {
 
         return reverseKGroup.get(0);
     }
-
-    // Helper function - reverses the linked list
-    // Returns an array of size 2 (head and tail of new linked list)
-//    ListNode[] reverseKNodes(ListNode head, int k) {
-//        List<ListNode> subList = new ArrayList<>();
-//
-//         ListNode currNode = head;
-//
-//        int counter = 1;
-//        while (counter <= k && currNode != null) {
-//            subList.add(currNode);
-//
-//        }
-//    }
 }

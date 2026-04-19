@@ -52,6 +52,59 @@ import java.util.PriorityQueue;
 // Not clear if we can create a new merged linked list and return that or merge existing list into one list, then return that.
 public class MergeKSortedList {
 
+	// Strategy 4:
+	// Divide and Conquer (Recursion) - Divide the linked lists then merge them together using merge sort.
+	// Time Complexity: O(nlog(k))		where k is number of linked lists (lists.length)
+	// RESULT: 1ms Beats 99.82%
+	// Space Complexity: O(log(k))
+	// RESULT: 46.71MB beats 67.79%
+	public ListNode mergeKLists4(ListNode[] lists) {
+		// Edge case
+		if (lists.length == 0 || lists == null) {
+			return null;
+		}
+		return divide(lists, 0, lists.length - 1);
+	}
+
+	private ListNode divide(ListNode[] lists, int l, int r) {
+		if (l > r) {
+			return null;
+		}
+
+		if (l == r) {
+			return lists[l];
+		}
+
+		int mid = l + (r - l) / 2;
+		ListNode left = divide(lists, l, mid);
+		ListNode right = divide(lists, mid + 1, r);
+
+		return merge(left, right);
+	}
+
+	private ListNode merge(ListNode l1, ListNode l2) {
+		ListNode dummy = new ListNode(0);
+		ListNode tail = dummy;
+
+		while (l1 != null && l2 != null) {
+
+			if (l1.val <= l2.val) {
+				tail.next = l1;
+				l1 = l1.next;
+			}
+			else {
+				tail.next = l2;
+				l2 = l2.next;
+			}
+
+			tail = tail.next;
+		}
+
+		tail.next = (l1 == null) ? l2 : l1;
+
+		return dummy.next;
+	}
+
     // Strategy 3:
     // 1. Add all the head nodes of the linked lists into a priority queue that is ordered from smallest to largest value.
     // 2. Retrieve the smallest node (and remove it) from the priority queue and add it to the new merged list.
