@@ -53,51 +53,43 @@ class Trie {
 	public List<String> search(char[][]board) {
 		for (int row = 0; row < board.length; row++) {
 			for (int col = 0; col < board[0].length; col++) {
-				res.addAll(
-						findWords(
-								root, board, row, col, new boolean[board.length][board[0].length], new HashSet<>(), ""
-						));
+				findWords(
+						root, board, row, col, new boolean[board.length][board[0].length],""
+				);
 			}
 		}
 		return new ArrayList<>(res);
 	}
 
-	public Set<String> findWords(TrieNode root, char[][] board, int row, int col, boolean[][] visited, Set<String> wordsFound, String word) {
+	public void findWords(TrieNode root, char[][] board, int row, int col, boolean[][] visited, String word) {
 		// Check if visited and edge of board
 		if (row < 0 || row >= board.length || col < 0 || col >= board[0].length) {
-			return wordsFound;
+			return;
 		}
 		if (visited[row][col]) {
-			return wordsFound;
+			return;
 		}
 
 		char ch = board[row][col];
 		if (root.children[ch - 'a'] == null) {
 			// no word found
-			return wordsFound;
+			return;
 		}
 		word += ch;
-		// We create a deep copy of the visited array because any modification to visited affects all other word searches.
-		boolean[][] visitedCopy = new boolean[board.length][board[0].length];
-		for (int i = 0; i < board.length; i++) {
-			for (int j = 0; j < board[0].length; j++) {
-				visitedCopy[i][j] = visited[i][j];
-			}
-		}
-		visitedCopy[row][col] = true;
+		visited[row][col] = true;
 
 		if (root.children[ch - 'a'].isWord) {
-			wordsFound.add(word);
+			res.add(word);
 		}
 
 		// search the board in every direction
 		TrieNode cur = root.children[ch - 'a'];
-		wordsFound.addAll(findWords(cur, board, row + 1, col, visitedCopy, new HashSet<>(), word));  // down
-		wordsFound.addAll(findWords(cur, board, row - 1, col, visitedCopy, new HashSet<>(), word));  // up
-		wordsFound.addAll(findWords(cur, board, row, col + 1, visitedCopy, new HashSet<>(), word));  // right
-		wordsFound.addAll(findWords(cur, board, row, col - 1, visitedCopy, new HashSet<>(), word));  // left
+		findWords(cur, board, row + 1, col, visited, word);  // down
+		findWords(cur, board, row - 1, col, visited, word);  // up
+		findWords(cur, board, row, col + 1, visited, word);  // right
+		findWords(cur, board, row, col - 1, visited, word);  // left
 
-		return wordsFound;
+		visited[row][col] = false;		// DON'T FORGET THIS! Needed so that other coordinates can visit the nodes already visited by this coordinate.
 	}
 
 	public void addWord(String word) {
