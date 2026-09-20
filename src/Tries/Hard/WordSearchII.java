@@ -30,8 +30,6 @@ public class WordSearchII {
 
 }
 
-
-
 class Solution {
 	public List<String> findWords(char[][] board, String[] words) {
 		Trie trie = new Trie();
@@ -112,18 +110,6 @@ class Trie {
 		}
 		cur.isWord = true;
 	}
-
-	// public boolean searchWord(String word) {
-	//     TrieNode cur = root;
-	//     for (int i = 0; i < word.length(); i++) {
-	//         char c = word.charAt(i);
-	//         if (cur.children[c - 'a'] == null) {
-	//             return false;
-	//         }
-	//         cur = cur.children[c - 'a'];
-	//     }
-	//     return cur.children.isWord;
-	// }
 }
 
 class TrieNode {
