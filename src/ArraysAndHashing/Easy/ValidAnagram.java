@@ -33,7 +33,6 @@ package ArraysAndHashing.Easy;
 
 import java.util.HashMap;
 import java.util.Objects;
-
 class ValidAnagram {
 
     public static void main(String[] args) {
